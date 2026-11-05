@@ -114,7 +114,7 @@ ShellRoot {
             right: 24
             bottom: 24
         }
-        implicitWidth: 380
+        implicitWidth: 430
         implicitHeight: 210
         color: "transparent"
         visible: root.openCodeRunning
