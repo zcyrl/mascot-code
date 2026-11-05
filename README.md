@@ -1,0 +1,253 @@
+# Mascot Code
+
+[![Release](https://img.shields.io/github/v/release/zcyrl/mascot-code?label=release)](https://github.com/zcyrl/mascot-code/releases)
+[![License: GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-blue)](LICENSE)
+
+A small desktop mascot for [OpenCode](https://opencode.ai). His name is **Empo**.
+
+I use OpenCode a lot, and I wanted something that shows what the agent is actually doing without me staring at the terminal the whole time. The Claude Code mascot was the inspiration, but I'm on Linux, so this is a Quickshell layer-shell overlay instead of an Electron app. No npm, no browser, no GTK window pretending to be a pet.
+
+Empo is a glowing compass-star. He reads files, types, runs commands, browses docs, gets happy when a session finishes, droops when something fails, and falls asleep after a minute of quiet. On my niri + [iNiR](https://github.com/snowarch/iNiR) setup he also steps out of the way while the OpenCode terminal is focused, then comes back when I look somewhere else.
+
+![Empo thinking after reading a file](assets/empo-thinking.png)
+
+## What he actually does
+
+| OpenCode is doing | Empo |
+| --- | --- |
+| `read`, `glob`, `grep`, `list` | wide eyes, scanning a page, bubble says `reading main.py` |
+| `edit`, `write`, `patch` | typing on a tiny keyboard, bubble says `coding test.py` |
+| `bash` / shell | dashing with speed lines, bubble says `running pytest -q` |
+| `webfetch`, `websearch` | a globe rings around him, bubble says `browsing docs.opencode.ai` |
+| thinking between tools | looks up with a `?`, bubble says `thinking after reading main.py` |
+| session idle | jumps with sparkles, `done!` |
+| session failed | droops, a tear, `error: ...` |
+| 60s without an event | sleeps, closed eyes, `zZ` |
+
+Tools are often faster than the eye. Empo holds an action for about 1.2 seconds before settling into the thinking pose, so you actually see the read or edit happen.
+
+## Screenshots
+
+| Coding | Browsing |
+| --- | --- |
+| ![Empo coding](assets/empo-coding.png) | ![Empo browsing](assets/empo-browsing.png) |
+
+| Happy | Sleeping |
+| --- | --- |
+| ![Empo happy](assets/empo-happy.png) | ![Empo sleeping](assets/empo-sleeping.png) |
+
+## How it works
+
+There are three pieces:
+
+1. **The OpenCode plugin** writes the current state to `/tmp/opencode-mascot.json`.
+2. **The Quickshell overlay** watches that file and draws Empo.
+3. **The character layer** maps the state to an expression. Empo is the first character; the switchboard is built for more.
+
+The state file looks like this:
+
+```json
+{
+  "state": "reading",
+  "detail": "main.py",
+  "ts": 1793869420662,
+  "sessionID": "ses_e584..."
+}
+```
+
+The plugin writes atomically (temp file + rename), so the overlay never reads half a JSON document. In the iNiR build a long-lived `inotifywait` watches `/tmp` for the rename. The standalone build simply re-reads the file once a second because it has to work everywhere.
+
+The plugin also tracks **per-session** state and follows the session selected in the TUI. A subagent or a background session cannot hijack the bubble. When Empo says `thinking after reading main.py`, that is the session you are actually looking at.
+
+## What you need
+
+- OpenCode 2.x. The V2 plugin API is what this uses; tested on `2.2.5`.
+- Quickshell 0.3 or newer. Tested on `0.3.2`.
+- A Wayland compositor with layer-shell.
+  - **Focus-aware hiding** needs niri + iNiR. That version talks to `niri msg`.
+  - **Everything else** works in the standalone build on Hyprland, Sway, river, and friends.
+- `procps` (`pgrep`, `ps`) and, for the iNiR build, `inotify-tools` (`inotifywait`).
+- No npm install. The plugin imports `@opencode/plugin` from the OpenCode runtime.
+
+Arch:
+
+```bash
+sudo pacman -S quickshell inotify-tools procps
+```
+
+Package names differ on Fedora/Debian/openSUSE; the standalone release only needs Quickshell and `procps`.
+
+## Install
+
+### 1. Clone
+
+```bash
+git clone https://github.com/zcyrl/mascot-code.git
+cd mascot-code
+```
+
+### 2. Install the OpenCode plugin first
+
+Do this before the overlay so you can confirm real events arrive.
+
+```bash
+mkdir -p ~/.config/opencode/plugins
+cp opencode/mascot.ts ~/.config/opencode/plugins/mascot.ts
+opencode plugin list
+```
+
+You should see `opencode.mascot` in the list. Then test the file:
+
+```bash
+echo '{"state":"coding","detail":"test.py"}' > /tmp/opencode-mascot.json
+watch -n 0.5 cat /tmp/opencode-mascot.json
+```
+
+Run OpenCode in another terminal and ask it to read and edit a file. The state should move through `reading`, `coding`, `thinking`, and eventually `sleeping`. If it doesn't, check `opencode plugin list` and the OpenCode log before touching the overlay.
+
+### 3A. Install the iNiR version
+
+Use this if you are on niri with iNiR. It gives you the focus-aware hide/show behaviour.
+
+```bash
+./install-inir.sh
+```
+
+The installer backs up your existing mascot module and config first. It copies:
+
+- `opencode/mascot.ts` → `~/.config/opencode/plugins/mascot.ts`
+- `inir/modules/mascot/` → `~/.config/quickshell/inir/modules/mascot/`
+- `inir/scripts/opencode-mascot-focus.sh` → `~/.config/quickshell/inir/scripts/`
+- adds `mascot.codingCompanion` to `~/.config/inir/config.json` if it isn't there
+
+Then:
+
+```bash
+inir restart
+inir ipc mascot coding true
+inir ipc mascot character empo
+inir ipc mascot status
+```
+
+If the installer warns that `codingCompanion` is missing from `Config.qml`, add the snippet from [`inir/config/Config-schema.qml`](inir/config/Config-schema.qml) to the `mascot` object. The settings toggle lives in `MascotConfig.qml` and `WMascotPage.qml`; the IPC command works without it.
+
+On niri + iNiR, the behaviour is:
+
+- OpenCode is running in a terminal, terminal **not** focused → Empo appears.
+- OpenCode terminal **focused** → Empo slides away.
+- OpenCode exits → Empo disappears.
+- DND, fullscreen, lock screen, session screen, region selector, recording → Empo stays hidden.
+
+### 3B. Install the standalone version
+
+Use this on any other distro or compositor. It does not need iNiR or niri. It shows while `opencode` is running and does not hide when the terminal is focused.
+
+```bash
+./install-standalone.sh
+systemctl --user daemon-reload
+systemctl --user enable --now mascot-code.service
+```
+
+Or just run it for the session:
+
+```bash
+qs -p ~/.config/quickshell/mascot-code
+```
+
+The standalone release is also attached to the GitHub release as a tarball.
+
+## Test every state
+
+```bash
+echo '{"state":"idle","detail":""}'                     > /tmp/opencode-mascot.json
+echo '{"state":"thinking","detail":"planning"}'         > /tmp/opencode-mascot.json
+echo '{"state":"reading","detail":"main.py"}'           > /tmp/opencode-mascot.json
+echo '{"state":"coding","detail":"test.py"}'            > /tmp/opencode-mascot.json
+echo '{"state":"running","detail":"pytest -q"}'         > /tmp/opencode-mascot.json
+echo '{"state":"browsing","detail":"docs.opencode.ai"}' > /tmp/opencode-mascot.json
+echo '{"state":"happy","detail":"done!"}'               > /tmp/opencode-mascot.json
+echo '{"state":"sad","detail":"tool failed"}'           > /tmp/opencode-mascot.json
+echo '{"state":"sleeping","detail":""}'                 > /tmp/opencode-mascot.json
+```
+
+If you omit `ts`, Empo treats it as "just now" and the 60-second sleep still works.
+
+## Adding characters and animations
+
+Empo is not hardcoded into the companion. `CharacterHost.qml` is the switchboard, and `characters/` is where characters live.
+
+A character is a QML component with this contract:
+
+```qml
+Item {
+    property string expression   // idle | thinking | reading | coding | running | browsing | happy | sad | sleeping
+    property bool active         // stop loops when false
+    property bool reducedMotion  // respect Appearance.animationsEnabled
+    // optional theme inputs: accent, accentAlt, ink, errorColor, successColor, surfaceColor, fontFamily
+}
+```
+
+To add one:
+
+1. Drop `characters/YourCharacter.qml` into `inir/modules/mascot/characters/`.
+2. Add `YourCharacter 1.0 YourCharacter.qml` to that directory's `qmldir`.
+3. Add a `Component` and a `case` in `CharacterHost.qml`.
+4. Set `mascot.codingCompanion.character` to `"yourcharacter"` or use
+   ```bash
+   inir ipc mascot character yourcharacter
+   ```
+
+Empo himself is `inir/modules/mascot/characters/Empo.qml`. The file is 800 lines of pure QML: a static Canvas for the star and glow, QML items for the face, and transform/opacity animations for the rest. You can copy it as a starting point. See [`inir/modules/mascot/characters/README.md`](inir/modules/mascot/characters/README.md) for the details.
+
+## Troubleshooting
+
+**Nothing appears.** Check the plugin state file first:
+
+```bash
+cat /tmp/opencode-mascot.json
+opencode plugin list
+```
+
+**iNiR build says the module is unavailable.** Read the QML log:
+
+```bash
+inir logs --issues
+inir logs -n 200
+```
+
+**Empo appears but doesn't update.** Make sure `inotifywait` exists:
+
+```bash
+command -v inotifywait || sudo pacman -S inotify-tools
+```
+
+**Focus hide/show doesn't work.** Check that niri can see the terminal:
+
+```bash
+niri msg windows
+~/.config/quickshell/inir/scripts/opencode-mascot-focus.sh \
+  "$(niri msg focused-window | sed -n 's/^  PID: //p')"
+```
+
+Expected: `focused`, `unfocused`, or `none`.
+
+**Two Empos.** You are running the standalone and iNiR builds at once. Stop one:
+
+```bash
+systemctl --user stop mascot-code.service
+```
+
+## License
+
+GPL-3.0-only. That is the "same project, keep my name on it" license — strong copyleft. If you fork it, modify it, or ship it, the derivative stays under GPL-3.0 and keeps the notices.
+
+`MascotCompanion.qml` is derived from iNiR's mascot companion, which is also GPL-3.0. The upstream project is [snowarch/iNiR](https://github.com/snowarch/iNiR). Empo, the OpenCode plugin, the standalone overlay and the installer scripts are original work by [Softbrick (zcyrl)](https://github.com/zcyrl), released under the same license.
+
+See [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE).
+
+## Credits
+
+- **Softbrick (zcyrl)** — Empo, plugin, overlay, glue and the late-night debugging.
+- **iNiR / snowarch** — the mascot companion foundation, settings conventions and the GPL-3.0 base.
+- **OpenCode** — the agent and its plugin API.
+- **Quickshell** — the thing that makes a transparent Wayland overlay this easy.

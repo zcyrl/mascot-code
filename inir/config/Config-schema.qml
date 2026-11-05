@@ -1,0 +1,7 @@
+// Add this inside the `mascot` JsonObject in modules/common/Config.qml.
+// The defaults are duplicated in defaults/config.json so fresh installs and
+// existing configs agree.
+property JsonObject codingCompanion: JsonObject {
+    property bool enable: false
+    property string character: "empo"
+}

@@ -1,0 +1,10 @@
+# Build artefacts
+dist/
+*.tar.gz
+*.zip
+
+# Local logs and caches
+*.log
+__pycache__/
+*.pyc
+.DS_Store

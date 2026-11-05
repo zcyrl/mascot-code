@@ -1,0 +1,21 @@
+Mascot Code
+Copyright (C) 2026 Softbrick (zcyrl)
+
+This project is licensed under the GNU General Public License, version 3
+(GPL-3.0-only). See LICENSE.
+
+Upstream attribution
+--------------------
+`inir/modules/mascot/MascotCompanion.qml` is a modified copy of iNiR's
+MascotCompanion.qml. iNiR is Copyright its contributors and is licensed under
+GPL-3.0. The upstream project is:
+
+    https://github.com/snowarch/iNiR
+
+The coding-companion behaviour, Empo character, OpenCode plugin, standalone
+Quickshell configuration, installer scripts and documentation in this
+repository are original work by Softbrick (zcyrl), also released under
+GPL-3.0-only.
+
+If you fork or redistribute this project, keep the GPL-3.0 license, keep these
+notices, and credit the original authors.

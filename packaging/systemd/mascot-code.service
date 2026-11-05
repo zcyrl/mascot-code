@@ -1,0 +1,14 @@
+[Unit]
+Description=Mascot Code (Empo) — OpenCode desktop mascot
+Documentation=https://github.com/zcyrl/mascot-code
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/qs -p %h/.config/quickshell/mascot-code
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=graphical-session.target
