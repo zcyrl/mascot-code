@@ -4,7 +4,7 @@
 set -euo pipefail
 
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
-VERSION="${1:-1.0.0}"
+VERSION="${1:-1.1.0}"
 DIST="${ROOT}/dist"
 STAGE="${DIST}/stage"
 
@@ -28,6 +28,8 @@ STANDALONE="${STAGE}/Mascot-Code-${VERSION}-standalone"
 mkdir -p "${STANDALONE}/characters"
 cp "${ROOT}/standalone/shell.qml" "${STANDALONE}/shell.qml"
 cp "${ROOT}/inir/modules/mascot/characters/Empo.qml" "${STANDALONE}/characters/Empo.qml"
+cp "${ROOT}/inir/modules/mascot/characters/Clawd.qml" "${STANDALONE}/characters/Clawd.qml"
+cp "${ROOT}/inir/modules/mascot/characters/qmldir" "${STANDALONE}/characters/qmldir"
 cp "${ROOT}/opencode/mascot.ts" "${STANDALONE}/mascot.ts"
 cp "${ROOT}/packaging/systemd/mascot-code.service" "${STANDALONE}/"
 cp "${ROOT}/LICENSE" "${ROOT}/NOTICE" "${STANDALONE}/"
@@ -46,8 +48,10 @@ Or run it directly:
 
    qs -p ~/.config/quickshell/mascot-code
 
-This build shows Empo while an `opencode` TUI is running. Focus-aware hiding is
-only in the iNiR build. See the main README for the state file and test commands.
+This build shows Empo or Clawd while an `opencode` TUI is running. Pick one
+with MASCOT_CHARACTER=empo (default) or MASCOT_CHARACTER=clawd. Focus-aware
+hiding is only in the iNiR build. See the main README for the state file and
+test commands.
 EOF
 tar -C "${STAGE}" -czf "${DIST}/Mascot-Code-${VERSION}-standalone.tar.gz" "Mascot-Code-${VERSION}-standalone"
 

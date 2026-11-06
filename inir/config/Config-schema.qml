@@ -3,5 +3,6 @@
 // existing configs agree.
 property JsonObject codingCompanion: JsonObject {
     property bool enable: false
+    // "empo" (default) or "clawd"
     property string character: "empo"
 }

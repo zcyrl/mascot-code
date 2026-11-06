@@ -15,7 +15,8 @@ focused. It shows while an `opencode` TUI process is running.
 That copies:
 
 - `standalone/shell.qml` → `~/.config/quickshell/mascot-code/shell.qml`
-- `characters/Empo.qml` → `~/.config/quickshell/mascot-code/characters/Empo.qml`
+- `characters/Empo.qml` and `characters/Clawd.qml` →
+  `~/.config/quickshell/mascot-code/characters/`
 - `opencode/mascot.ts` → `~/.config/opencode/plugins/mascot.ts`
 - the user service → `~/.config/systemd/user/mascot-code.service`
 
@@ -31,6 +32,15 @@ Or run it directly:
 ```bash
 qs -p ~/.config/quickshell/mascot-code
 ```
+
+Select Clawd with an environment override:
+
+```bash
+MASCOT_CHARACTER=clawd qs -p ~/.config/quickshell/mascot-code
+```
+
+For the systemd service, put `Environment=MASCOT_CHARACTER=clawd` in a drop-in
+or edit the unit. The default is Empo.
 
 ## Requirements
 
@@ -51,12 +61,13 @@ once a second.
 | hide while OpenCode focused | yes, via niri | no |
 | hide when OpenCode exits | yes | yes |
 | inotify state updates | yes | 1 Hz `cat` |
-| theme | iNiR wallpaper palette | built-in Empo palette |
+| theme | iNiR wallpaper palette | built-in Empo palette; Clawd keeps Claude orange |
+| character selection | `mascot.codingCompanion.character` | `MASCOT_CHARACTER=empo` or `clawd` |
 | settings UI | iNiR Settings | none; env/file only |
 
 The standalone is intentionally smaller. Focus-aware hiding would require a
 different focus probe for every compositor, and that is not worth pretending to
-support in v1.0.0.
+support yet.
 
 ## Stop / uninstall
 

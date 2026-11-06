@@ -2,6 +2,39 @@
 
 All notable changes to Mascot Code are documented here.
 
+## v1.1.0 — 2026-11-06
+
+Clawd joins the companion.
+
+### Added
+
+- **Clawd**, a pixel-art QML interpretation of Anthropic's Claude Code crab:
+  flat Claude-orange body, black eyes, claws and four legs, drawn on a fixed
+  300x300 stage so the blocks stay crisp.
+- Nine Clawd expressions: idle, thinking, reading, coding, running, browsing,
+  happy, sad and sleeping, with a page, keyboard, browser card, speed lines,
+  sparkles, tear and `zZ`.
+- Select a character at runtime with `inir ipc mascot character clawd` (or
+  `empo`). `claude` is accepted as an alias for `clawd`.
+- Standalone character selection with `MASCOT_CHARACTER=clawd`. The systemd
+  unit defaults to Empo.
+- `scripts/capture-character-screenshots.sh`, which renders a character on a
+  clean 1100x650 black stage for documentation and does not need niri or grim.
+- Fresh black-background Clawd screenshots in `assets/`.
+
+### Changed
+
+- `CharacterHost.qml` now has both built-in components.
+- The standalone installer and release package ship both characters and the
+  character `qmldir`.
+- Documentation describes both characters and how to switch.
+
+### Notes
+
+- Clawd is Anthropic's character. This is an unofficial fan interpretation, not
+  affiliated with or endorsed by Anthropic. The GPL-3.0 license covers the QML
+  code; the character and marks remain Anthropic's.
+
 ## v1.0.0 — 2026-11-05
 
 First public release.

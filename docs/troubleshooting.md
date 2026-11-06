@@ -39,11 +39,12 @@ inir logs -n 200
 ```
 
 Usually this is a QML compile error in the module, a missing `CharacterHost.qml`,
-or the `characters/` directory not being copied.
+or the `characters/` directory not being copied. Both `Clawd.qml` and the
+`characters/qmldir` entry are required.
 
-## The bubble updates but the star is hidden
+## The bubble updates but the mascot is hidden
 
-On the iNiR build, the star hides while the OpenCode terminal is focused. That
+On the iNiR build, the mascot hides while the OpenCode terminal is focused. That
 is intentional. Focus another window to see it.
 
 Check:
@@ -53,6 +54,17 @@ inir ipc mascot status
 ```
 
 Look at `coding.openCodeFocused` and `showing`.
+
+## The wrong character appears
+
+```bash
+inir ipc mascot character clawd
+inir ipc mascot status
+```
+
+If the name is accepted but the old character stays, the installed
+`CharacterHost.qml` and `characters/` are out of sync with this repo. Re-run
+`./install-inir.sh` and restart iNiR.
 
 ## Focus detection is wrong
 
@@ -84,7 +96,7 @@ sudo pacman -S inotify-tools
 
 The standalone build does not need it.
 
-## Two Empos
+## Two mascots
 
 You are running both builds. Stop the standalone service:
 

@@ -15,7 +15,7 @@ opencode/mascot.ts
 Quickshell overlay
   │  expression + detail
   ▼
-CharacterHost → Empo
+CharacterHost → Empo / Clawd
 ```
 
 ## The plugin
@@ -64,6 +64,7 @@ The module lives in `~/.config/quickshell/inir/modules/mascot/`.
   mode, the session watcher and the focus rules.
 - `CharacterHost.qml` picks the character component.
 - `characters/Empo.qml` draws Empo.
+- `characters/Clawd.qml` draws the Claude Code crab.
 - `scripts/opencode-mascot-focus.sh` answers `none`, `focused` or `unfocused`
   by walking the process tree from `opencode` up to the focused niri window PID.
 
@@ -74,7 +75,7 @@ Focus changes trigger the probe immediately. A 3-second timer catches OpenCode
 starting or exiting while the focus stays on the same window.
 
 The coding mode is enabled with `mascot.codingCompanion.enable`. The character is
-selected with `mascot.codingCompanion.character`.
+selected with `mascot.codingCompanion.character` (`empo` or `clawd`).
 
 ## The standalone build
 
@@ -83,7 +84,7 @@ and does not use the niri focus script. It:
 
 - checks `pgrep -x opencode` every 2.5 seconds
 - reads the state file once a second with `cat`
-- shows Empo while OpenCode is running
+- shows the character selected by `MASCOT_CHARACTER` while OpenCode is running
 - uses the same state-to-expression mapping
 
 That is the version for Hyprland, Sway, river, and any other Wayland compositor
@@ -92,8 +93,8 @@ with layer-shell. Focus-aware hiding is intentionally not promised there.
 ## Sleep and staleness
 
 Both builds mark the state as sleeping when `ts` is older than 60 seconds. This
-is the crash fallback: if OpenCode dies without writing a final state, Empo does
-not sit on `coding` forever.
+is the crash fallback: if OpenCode dies without writing a final state, the
+mascot does not sit on `coding` forever.
 
 ## Performance
 

@@ -2,7 +2,9 @@
 
 This is the Arch + niri + [iNiR](https://github.com/snowarch/iNiR) build. It
 adds the coding mode to iNiR's existing mascot companion and uses niri to hide
-Empo while the OpenCode terminal is focused.
+the mascot while the OpenCode terminal is focused.
+
+Either Empo or Clawd can be selected; the default is Empo.
 
 ## 1. Install the plugin
 
@@ -53,6 +55,8 @@ versions. Use the IPC command instead:
 
 ```bash
 inir ipc mascot coding true
+inir ipc mascot character clawd
+# or
 inir ipc mascot character empo
 ```
 

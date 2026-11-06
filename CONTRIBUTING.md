@@ -7,11 +7,17 @@ Small project, simple rules.
    in `opencode/mascot.ts`, `inir/modules/mascot/MascotCompanion.qml`,
    `standalone/shell.qml`, and a visual in each character.
 3. If you add a character, follow
-   [`inir/modules/mascot/characters/README.md`](inir/modules/mascot/characters/README.md).
+   [`inir/modules/mascot/characters/README.md`](inir/modules/mascot/characters/README.md)
+   and add it to `CharacterHost.qml`, `standalone/shell.qml` and the release
+   package script.
 4. Run `scripts/test-states.sh <state> "<detail>"` and check the iNiR log:
    ```bash
    inir restart
    inir logs --issues
+   ```
+   Regenerate the docs shots with:
+   ```bash
+   ./scripts/capture-character-screenshots.sh clawd
    ```
 5. Keep the license. New files get:
    ```text

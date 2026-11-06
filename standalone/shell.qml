@@ -11,8 +11,11 @@ import "characters"
  * Mascot Code — standalone Quickshell overlay.
  *
  * This is the "works outside inir" build: one transparent layer-shell window
- * in the bottom-right corner, Empo, a speech bubble, and the OpenCode state
- * file. It does not need niri, iNiR, GTK, npm or a browser.
+ * in the bottom-right corner, a character, a speech bubble, and the OpenCode
+ * state file. It does not need niri, iNiR, GTK, npm or a browser.
+ *
+ * Pick the character with MASCOT_CHARACTER=empo or MASCOT_CHARACTER=clawd
+ * (default: empo).
  *
  * It shows while an `opencode` TUI process is running. Focus-aware hiding is
  * an iNiR/niri integration and lives in the inir version, not here.
@@ -21,6 +24,7 @@ ShellRoot {
     id: root
 
     readonly property string statePath: "/tmp/opencode-mascot.json"
+    readonly property string character: (Quickshell.env("MASCOT_CHARACTER") || "empo").toLowerCase()
     property bool openCodeRunning: false
     property string state: "idle"
     property string detail: ""
@@ -122,37 +126,28 @@ ShellRoot {
         WlrLayershell.layer: WlrLayer.Overlay
         WlrLayershell.namespace: "mascot-code"
         WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
-        mask: Region { item: empoStar }
+        mask: Region { item: mascotItem }
 
         Item {
-            id: empoStar
+            id: mascotItem
             width: 180
             height: 180
             anchors.right: parent.right
             anchors.bottom: parent.bottom
 
-            Empo {
+            Loader {
                 anchors.fill: parent
-                expression: root.displayState
-                detail: root.detail
-                active: root.openCodeRunning
-                reducedMotion: false
-                accent: "#ff9ecf"
-                accentAlt: "#8fb8ff"
-                ink: "#1a1a1f"
-                errorColor: "#ff6b8a"
-                successColor: "#8ee6b0"
-                surfaceColor: "#1b1f2a"
-                mutedColor: "#8b93a7"
-                fontFamily: "sans-serif"
+                sourceComponent: root.character === "clawd" || root.character === "claude"
+                    ? clawdComponent
+                    : empoComponent
             }
         }
 
         Rectangle {
             id: bubble
-            anchors.right: empoStar.left
+            anchors.right: mascotItem.left
             anchors.rightMargin: 10
-            anchors.verticalCenter: empoStar.verticalCenter
+            anchors.verticalCenter: mascotItem.verticalCenter
             visible: opacity > 0
             opacity: root.line.length > 0 ? 1 : 0
             width: Math.min(bubbleText.implicitWidth + 20, 210)
@@ -177,6 +172,34 @@ ShellRoot {
                 font.pixelSize: 13
                 color: "#f2f5ff"
             }
+        }
+    }
+
+    Component {
+        id: empoComponent
+        Empo {
+            expression: root.displayState
+            detail: root.detail
+            active: root.openCodeRunning
+            reducedMotion: false
+            accent: "#ff9ecf"
+            accentAlt: "#8fb8ff"
+            ink: "#1a1a1f"
+            errorColor: "#ff6b8a"
+            successColor: "#8ee6b0"
+            surfaceColor: "#1b1f2a"
+            mutedColor: "#8b93a7"
+            fontFamily: "sans-serif"
+        }
+    }
+
+    Component {
+        id: clawdComponent
+        Clawd {
+            expression: root.displayState
+            detail: root.detail
+            active: root.openCodeRunning
+            reducedMotion: false
         }
     }
 }

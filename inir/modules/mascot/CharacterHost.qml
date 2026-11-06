@@ -13,6 +13,8 @@ import qs.modules.mascot.characters
  *   3. Add a Component below and a case in _componentFor().
  *   4. Set mascot.codingCompanion.character to its name.
  *
+ * Built-in characters: "empo" (default) and "clawd" (Claude Code crab).
+ *
  * A character must expose:
  *   expression: idle | thinking | reading | coding | running | browsing | happy | sad | sleeping
  *   active: stop all loops when false
@@ -37,6 +39,9 @@ Item {
 
     function _componentFor(name) {
         switch (String(name ?? "").toLowerCase()) {
+        case "clawd":
+        case "claude":
+            return clawdComponent
         case "empo":
         default:
             return empoComponent
@@ -51,6 +56,24 @@ Item {
     Component {
         id: empoComponent
         Empo {
+            expression: root.expression
+            detail: root.detail
+            active: root.active
+            reducedMotion: root.reducedMotion
+            accent: root.accent
+            accentAlt: root.accentAlt
+            ink: root.ink
+            errorColor: root.errorColor
+            successColor: root.successColor
+            surfaceColor: root.surfaceColor
+            mutedColor: root.mutedColor
+            fontFamily: root.fontFamily
+        }
+    }
+
+    Component {
+        id: clawdComponent
+        Clawd {
             expression: root.expression
             detail: root.detail
             active: root.active

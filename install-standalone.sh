@@ -16,6 +16,8 @@ mkdir -p "${TARGET}/characters" "${OC_PLUGIN_DIR}" "${SERVICE_DIR}" "${BACKUP}"
 
 cp "${ROOT}/standalone/shell.qml" "${TARGET}/shell.qml"
 cp "${ROOT}/inir/modules/mascot/characters/Empo.qml" "${TARGET}/characters/Empo.qml"
+cp "${ROOT}/inir/modules/mascot/characters/Clawd.qml" "${TARGET}/characters/Clawd.qml"
+cp "${ROOT}/inir/modules/mascot/characters/qmldir" "${TARGET}/characters/qmldir"
 cp "${ROOT}/opencode/mascot.ts" "${OC_PLUGIN_DIR}/mascot.ts"
 cp "${ROOT}/packaging/systemd/mascot-code.service" "${SERVICE_DIR}/mascot-code.service"
 

@@ -25,8 +25,9 @@ In `~/.config/quickshell/inir/defaults/config.json`, inside `"mascot"`:
 }
 ```
 
-Existing user configs do not need a migration: the code falls back to `false`
-and `"empo"`. The installer adds the keys to your live config.
+`character` is `"empo"` or `"clawd"`. Existing user configs do not need a
+migration: the code falls back to `false` and `"empo"`. The installer adds the
+keys to your live config.
 
 ## 3. ii settings switch
 
@@ -65,6 +66,7 @@ WSettingsSwitch {
 ```bash
 inir ipc mascot coding true
 inir ipc mascot coding false
+inir ipc mascot character clawd
 inir ipc mascot character empo
 inir ipc mascot status
 ```

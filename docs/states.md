@@ -1,6 +1,6 @@
 # States
 
-The state file is `/tmp/opencode-mascot.json`.
+Both characters read the same state file: `/tmp/opencode-mascot.json`.
 
 ```json
 {
@@ -17,17 +17,17 @@ than 60 seconds, the overlay shows `sleeping` even if the state still says
 
 ## Mapping
 
-| State | Empo | Bubble |
-| --- | --- | --- |
-| `idle` | blinking, gentle bob | hidden |
-| `thinking` | looks up, floating `?` | `thinking...` or `thinking after reading main.py` |
-| `reading` | wide eyes, scanning page | `reading main.py` |
-| `coding` | looks down, tiny keyboard | `coding test.py` |
-| `running` | tilted, speed lines, bounce | `running pytest -q` |
-| `browsing` | rotating globe ring | `browsing docs.opencode.ai` |
-| `happy` | jump, closed happy eyes, sparkles | `done!` |
-| `sad` | droop, tear, frown | `error: ...` |
-| `sleeping` | closed eyes, `zZ`, glow dimmed | hidden |
+| State | Empo | Clawd | Bubble |
+| --- | --- | --- | --- |
+| `idle` | blinking, gentle bob | blinking, little body bob | hidden |
+| `thinking` | looks up, floating `?` | eyes up, floating `?` | `thinking...` or `thinking after reading main.py` |
+| `reading` | wide eyes, scanning page | holds a page, scans it with his eyes | `reading main.py` |
+| `coding` | looks down, tiny keyboard | leans onto a pixel keyboard | `coding test.py` |
+| `running` | tilted, speed lines, bounce | scuttles, legs swinging, speed lines | `running pytest -q` |
+| `browsing` | rotating globe ring | a little browser window with a globe icon | `browsing docs.opencode.ai` |
+| `happy` | jump, closed happy eyes, sparkles | jump, arched eyes, sparkles | `done!` |
+| `sad` | droop, tear, frown | droops, squints, a tear | `error: ...` |
+| `sleeping` | closed eyes, `zZ`, glow dimmed | closed eyes, `zZ`, settled down | hidden |
 
 ## Tool mapping
 
