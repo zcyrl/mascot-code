@@ -6,7 +6,7 @@ Mascot Code is deliberately three small layers instead of one big app.
 OpenCode
   │  tool / session events
   ▼
-opencode/mascot.ts
+opencode/mascot/index.ts
   │  atomic JSON writes
   ▼
 /tmp/opencode-mascot.json
@@ -18,9 +18,14 @@ Quickshell overlay
 CharacterHost → Empo / Clawd
 ```
 
+The same plugin package also has `tui.tsx` (the terminal `/mascot` card) and
+`gui-experimental.cjs` (the OpenCode Desktop card). Both pickers write
+`~/.config/mascot-code/character.json`; the overlays read that before their
+configured character.
+
 ## The plugin
 
-`opencode/mascot.ts` runs inside the OpenCode server. It registers:
+`opencode/mascot/index.ts` runs inside the OpenCode server. It registers:
 
 - `tool.execute.before` for reading, coding, running and browsing
 - `tool.execute.after` for the thinking state
@@ -56,6 +61,36 @@ URL or command, truncated to about 30 characters. `ts` is Unix milliseconds.
 `sessionID` is diagnostic and used by the overlay to avoid carrying a held
 action across a session switch.
 
+## The `/mascot` picker
+
+The plugin package has three parts:
+
+- `opencode/mascot/index.ts` — the server part above.
+- `opencode/mascot/tui.tsx` — the OpenTUI card. `/mascot` opens a focusable
+  dialog; hovering a card starts a 1.4-second expression timer.
+- `opencode/mascot/gui-experimental.cjs` — the OpenCode Desktop 2.2+ card,
+  built from `gui/src/`. It uses the app's `Dialog` and a main-process IPC to
+  read/write the selection.
+
+The picker frames live in `opencode/mascot/art.ts` as PNG data URLs, generated
+from the QML characters by `scripts/generate-tui-assets.sh`. Both parts write
+the same selection file:
+
+```json
+{
+  "character": "clawd",
+  "updated": 1793969137623
+}
+```
+
+`~/.config/mascot-code/character.json` wins over the iNiR config and
+`MASCOT_CHARACTER`. The overlay's `mascot character` IPC writes the same file,
+so the three ways to switch cannot disagree.
+
+OpenCode Desktop 2.1.x predates the GUI plugin API; it can still use the TUI
+picker but has no desktop card. OpenCode Desktop 2.2+ loads
+`gui-experimental.cjs` from the local plugin package.
+
 ## The iNiR integration
 
 The module lives in `~/.config/quickshell/inir/modules/mascot/`.
@@ -75,7 +110,8 @@ Focus changes trigger the probe immediately. A 3-second timer catches OpenCode
 starting or exiting while the focus stays on the same window.
 
 The coding mode is enabled with `mascot.codingCompanion.enable`. The character is
-selected with `mascot.codingCompanion.character` (`empo` or `clawd`).
+selected with `mascot.codingCompanion.character` (`empo` or `clawd`), unless the
+shared picker file exists; that file wins.
 
 ## The standalone build
 

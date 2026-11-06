@@ -12,7 +12,7 @@ opencode plugin list
 `opencode plugin list` should include:
 
 ```text
-opencode.mascot  local  /home/you/.config/opencode/plugins/mascot.ts
+zcyrl.mascot  local  /home/you/.config/opencode/plugins/mascot
 ```
 
 If the file exists but never changes, the plugin is not loaded. Restart OpenCode
@@ -58,11 +58,16 @@ Look at `coding.openCodeFocused` and `showing`.
 ## The wrong character appears
 
 ```bash
+cat ~/.config/mascot-code/character.json
 inir ipc mascot character clawd
 inir ipc mascot status
 ```
 
-If the name is accepted but the old character stays, the installed
+The shared picker file wins over the config. If the picker changes it but the
+overlay still shows the old character, the running iNiR module is older than
+this repo: run `./install-inir.sh` and `inir restart` once.
+
+If the name is accepted but the old character stays after that, the installed
 `CharacterHost.qml` and `characters/` are out of sync with this repo. Re-run
 `./install-inir.sh` and restart iNiR.
 

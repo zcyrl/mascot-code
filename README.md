@@ -26,6 +26,18 @@ inir ipc mascot character empo
 
 Or set `mascot.codingCompanion.character` in `~/.config/inir/config.json`. The standalone build uses `MASCOT_CHARACTER=clawd` (or `empo`) when you start it.
 
+## Pick with `/mascot`
+
+In the OpenCode TUI, type `/mascot`. In OpenCode Desktop, type it in the composer or pick **Choose mascot** from the command palette. A floating card shows Empo and Clawd; hover a card to watch it cycle through its nine expressions, then click it to choose.
+
+The picker is one plugin with three parts:
+
+- a server part that keeps writing OpenCode's state
+- a TUI card for the terminal
+- a desktop card for OpenCode Desktop 2.2 or newer
+
+Whichever picker you use writes `~/.config/mascot-code/character.json`. The iNiR and standalone overlays read that file first, so the desktop mascot switches immediately. The saved choice also survives an OpenCode restart.
+
 ## What they actually do
 
 | OpenCode is doing | Mascot |
@@ -89,6 +101,7 @@ The plugin also tracks **per-session** state and follows the session selected in
 ## What you need
 
 - OpenCode 2.x. The V2 plugin API is what this uses; tested on `2.2.5`.
+- OpenCode Desktop 2.2 or newer for the desktop `/mascot` card. The 2.1.x desktop app has no GUI plugin API yet; the TUI picker works there regardless.
 - Quickshell 0.3 or newer. Tested on `0.3.2`.
 - A Wayland compositor with layer-shell.
   - **Focus-aware hiding** needs niri + iNiR. That version talks to `niri msg`.
@@ -119,11 +132,11 @@ Do this before the overlay so you can confirm real events arrive.
 
 ```bash
 mkdir -p ~/.config/opencode/plugins
-cp opencode/mascot.ts ~/.config/opencode/plugins/mascot.ts
+cp -a opencode/mascot ~/.config/opencode/plugins/mascot
 opencode plugin list
 ```
 
-You should see `opencode.mascot` in the list. Then test the file:
+You should see `zcyrl.mascot` in the list. Then test the file:
 
 ```bash
 echo '{"state":"coding","detail":"test.py"}' > /tmp/opencode-mascot.json
@@ -142,7 +155,7 @@ Use this if you are on niri with iNiR. It gives you the focus-aware hide/show be
 
 The installer backs up your existing mascot module and config first. It copies:
 
-- `opencode/mascot.ts` → `~/.config/opencode/plugins/mascot.ts`
+- `opencode/mascot/` → `~/.config/opencode/plugins/mascot/`
 - `inir/modules/mascot/` → `~/.config/quickshell/inir/modules/mascot/`
 - `inir/scripts/opencode-mascot-focus.sh` → `~/.config/quickshell/inir/scripts/`
 - adds `mascot.codingCompanion` to `~/.config/inir/config.json` if it isn't there

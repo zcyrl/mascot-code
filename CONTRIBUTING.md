@@ -4,7 +4,8 @@ Small project, simple rules.
 
 1. Fork it, make a branch, test the states you touched.
 2. Keep the plugin and both overlays in sync. A new state should have a mapping
-   in `opencode/mascot.ts`, `inir/modules/mascot/MascotCompanion.qml`,
+   in `opencode/mascot/index.ts`, `opencode/mascot/tui.tsx`, `gui/src/gui.tsx`,
+   `inir/modules/mascot/MascotCompanion.qml`,
    `standalone/shell.qml`, and a visual in each character.
 3. If you add a character, follow
    [`inir/modules/mascot/characters/README.md`](inir/modules/mascot/characters/README.md)

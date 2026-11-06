@@ -24,7 +24,20 @@ ShellRoot {
     id: root
 
     readonly property string statePath: "/tmp/opencode-mascot.json"
-    readonly property string character: (Quickshell.env("MASCOT_CHARACTER") || "empo").toLowerCase()
+    readonly property string mascotConfigDir: (Quickshell.env("XDG_CONFIG_HOME") || (Quickshell.env("HOME") + "/.config")) + "/mascot-code"
+    readonly property string sharedCharacter: {
+        if (!characterFile.loaded) return ""
+        try {
+            const data = JSON.parse(characterFile.text())
+            const value = String(data.character ?? "").toLowerCase()
+            return ["empo", "clawd", "claude"].includes(value) ? value : ""
+        } catch (error) {
+            return ""
+        }
+    }
+    readonly property string character: sharedCharacter.length > 0
+        ? sharedCharacter
+        : (Quickshell.env("MASCOT_CHARACTER") || "empo").toLowerCase()
     property bool openCodeRunning: false
     property string state: "idle"
     property string detail: ""
@@ -105,6 +118,16 @@ ShellRoot {
             root.now = Date.now()
             if (!stateReader.running) stateReader.running = true
         }
+    }
+
+    // The /mascot picker in OpenCode writes this shared selection. It wins over
+    // MASCOT_CHARACTER so TUI, desktop and standalone agree on the character.
+    FileView {
+        id: characterFile
+        path: root.mascotConfigDir + "/character.json"
+        watchChanges: true
+        printErrors: false
+        onFileChanged: reload()
     }
 
     PanelWindow {

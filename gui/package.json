@@ -1,0 +1,16 @@
+{
+  "name": "mascot-code-gui-build",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@opencode/plugin": "2.2.5"
+  },
+  "devDependencies": {
+    "solid-js": "^1.9.16",
+    "vite": "^7.1.0",
+    "vite-plugin-solid": "^2.11.8"
+  }
+}

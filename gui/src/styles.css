@@ -1,0 +1,155 @@
+.mascot-code-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 540px;
+}
+
+.mascot-code-hint {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  opacity: 0.7;
+  text-align: center;
+}
+
+.mascot-code-grid {
+  display: flex;
+  gap: 16px;
+  align-items: stretch;
+}
+
+.mascot-code-card {
+  --mascot-accent: #d77856;
+  appearance: none;
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 18px 18px 16px;
+  border: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--mascot-accent) 5%, transparent);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transition:
+    border-color 140ms ease,
+    background 140ms ease,
+    transform 140ms ease;
+}
+
+.mascot-code-card:hover,
+.mascot-code-card:focus-visible {
+  border-color: var(--mascot-accent);
+  background: color-mix(in srgb, var(--mascot-accent) 11%, transparent);
+  transform: translateY(-2px);
+  outline: none;
+}
+
+.mascot-code-card[aria-pressed="true"] {
+  border-color: var(--mascot-accent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--mascot-accent) 55%, transparent);
+}
+
+.mascot-code-card:disabled {
+  cursor: wait;
+  opacity: 0.8;
+}
+
+.mascot-code-image {
+  width: 176px;
+  height: 176px;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 10px 24px color-mix(in srgb, var(--mascot-accent) 18%, transparent));
+}
+
+.mascot-code-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.mascot-code-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--mascot-accent);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--mascot-accent) 60%, transparent);
+}
+
+.mascot-code-state {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  opacity: 0.85;
+}
+
+.mascot-code-tagline {
+  font-size: 12px;
+  opacity: 0.6;
+  text-align: center;
+}
+
+.mascot-code-badge {
+  margin-top: 4px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+.mascot-code-badge.active {
+  color: var(--mascot-accent);
+  background: color-mix(in srgb, var(--mascot-accent) 14%, transparent);
+  opacity: 1;
+}
+
+.mascot-code-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  opacity: 0.65;
+}
+
+.mascot-code-close {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.mascot-code-close:hover,
+.mascot-code-close:focus-visible {
+  background: color-mix(in srgb, currentColor 8%, transparent);
+  outline: none;
+}
+
+@media (max-width: 640px) {
+  .mascot-code-picker {
+    min-width: 0;
+  }
+
+  .mascot-code-grid {
+    flex-direction: column;
+  }
+
+  .mascot-code-image {
+    width: 140px;
+    height: 140px;
+  }
+}

@@ -29,6 +29,11 @@ In `~/.config/quickshell/inir/defaults/config.json`, inside `"mascot"`:
 migration: the code falls back to `false` and `"empo"`. The installer adds the
 keys to your live config.
 
+The `/mascot` picker in OpenCode writes
+`~/.config/mascot-code/character.json`; this file wins over the config while it
+exists, so the TUI and desktop pickers can switch the overlay without opening
+iNiR Settings. The `inir ipc mascot character` command updates both.
+
 ## 3. ii settings switch
 
 In `modules/settings/MascotConfig.qml`, inside the first `SettingsGroup` after

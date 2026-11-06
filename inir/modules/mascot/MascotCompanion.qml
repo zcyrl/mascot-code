@@ -22,6 +22,17 @@ Scope {
     id: root
 
     readonly property bool codingMode: Config.options?.mascot?.codingCompanion?.enable ?? false
+    readonly property string mascotConfigDir: (Quickshell.env("XDG_CONFIG_HOME") || (Quickshell.env("HOME") + "/.config")) + "/mascot-code"
+    readonly property string sharedCharacter: {
+        if (!characterFile.loaded) return ""
+        try {
+            const data = JSON.parse(characterFile.text())
+            const value = String(data.character ?? "").toLowerCase()
+            return ["empo", "clawd", "claude"].includes(value) ? value : ""
+        } catch (error) {
+            return ""
+        }
+    }
     property bool openCodeRunning: false
     property bool openCodeFocused: false
     readonly property bool codingActive: codingMode && openCodeRunning
@@ -1221,6 +1232,7 @@ Scope {
             const value = String(name ?? "").toLowerCase()
             if (value.length === 0) return "invalid character"
             Config.setNestedValue("mascot.codingCompanion.character", value)
+            characterFile.setText(JSON.stringify({ character: value, updated: Date.now() }, null, 2) + "\n")
             return value
         }
         // Chaos mode: run across the desktop and mess with widgets/panels
@@ -1265,6 +1277,16 @@ Scope {
                 console.warn("[MascotCompanion] manifest load failed:", e)
             }
         }
+    }
+
+    // The /mascot picker in OpenCode writes this shared selection. It wins over
+    // the iNiR config so the TUI and desktop picker switch the same overlay.
+    FileView {
+        id: characterFile
+        path: root.mascotConfigDir + "/character.json"
+        watchChanges: true
+        printErrors: false
+        onFileChanged: reload()
     }
 
     // Decide whether the coding companion should be on screen at all.
@@ -1505,7 +1527,9 @@ Scope {
                     anchors.fill: parent
                     visible: root.codingMode
                     active: root.codingMode && root.showing
-                    character: Config.options?.mascot?.codingCompanion?.character ?? "empo"
+                    character: root.sharedCharacter.length > 0
+                        ? root.sharedCharacter
+                        : (Config.options?.mascot?.codingCompanion?.character ?? "empo")
                     expression: root.codingDisplayState
                     detail: root.codingDisplayDetail
                 }

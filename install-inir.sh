@@ -15,12 +15,17 @@ if [ ! -d "${INIR}/modules/mascot" ]; then
     exit 1
 fi
 
-mkdir -p "${BACKUP}" "${OC_PLUGIN_DIR}" "${INIR}/scripts"
+mkdir -p "${BACKUP}" "${OC_PLUGIN_DIR}" "${INIR}/scripts" "${HOME}/.config/mascot-code"
 cp -a "${INIR}/modules/mascot" "${BACKUP}/mascot"
 cp -a "${INIR}/scripts/opencode-mascot-focus.sh" "${BACKUP}/opencode-mascot-focus.sh" 2>/dev/null || true
 [ -f "${HOME}/.config/inir/config.json" ] && cp -a "${HOME}/.config/inir/config.json" "${BACKUP}/config.json"
+[ -f "${OC_PLUGIN_DIR}/mascot.ts" ] && cp -a "${OC_PLUGIN_DIR}/mascot.ts" "${BACKUP}/mascot.ts"
+[ -d "${OC_PLUGIN_DIR}/mascot" ] && cp -a "${OC_PLUGIN_DIR}/mascot" "${BACKUP}/mascot-plugin"
 
-cp "${ROOT}/opencode/mascot.ts" "${OC_PLUGIN_DIR}/mascot.ts"
+rm -f "${OC_PLUGIN_DIR}/mascot.ts"
+rm -rf "${OC_PLUGIN_DIR}/mascot"
+
+cp -a "${ROOT}/opencode/mascot" "${OC_PLUGIN_DIR}/mascot"
 cp -a "${ROOT}/inir/modules/mascot/." "${INIR}/modules/mascot/"
 cp "${ROOT}/inir/scripts/opencode-mascot-focus.sh" "${INIR}/scripts/opencode-mascot-focus.sh"
 chmod +x "${INIR}/scripts/opencode-mascot-focus.sh"

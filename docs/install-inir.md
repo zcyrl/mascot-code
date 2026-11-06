@@ -4,17 +4,17 @@ This is the Arch + niri + [iNiR](https://github.com/snowarch/iNiR) build. It
 adds the coding mode to iNiR's existing mascot companion and uses niri to hide
 the mascot while the OpenCode terminal is focused.
 
-Either Empo or Clawd can be selected; the default is Empo.
+Either Empo or Clawd can be selected; the default is Empo. Type `/mascot` in OpenCode (TUI or Desktop 2.2+) for the visual picker.
 
 ## 1. Install the plugin
 
 ```bash
 mkdir -p ~/.config/opencode/plugins
-cp opencode/mascot.ts ~/.config/opencode/plugins/mascot.ts
+cp -a opencode/mascot ~/.config/opencode/plugins/mascot
 opencode plugin list
 ```
 
-Confirm `opencode.mascot` is listed before continuing.
+Confirm `zcyrl.mascot` is listed before continuing.
 
 ## 2. Run the installer
 
@@ -59,6 +59,10 @@ inir ipc mascot character clawd
 # or
 inir ipc mascot character empo
 ```
+
+The `/mascot` picker writes `~/.config/mascot-code/character.json`. That
+shared file wins over the config, so the picker switches the overlay without
+opening Settings. `inir ipc mascot character` writes both.
 
 If you want the switch in the UI, copy the "Coding companion" `SettingsSwitch`
 from the reference files in `inir/modules/mascot/` context into:
@@ -111,7 +115,7 @@ sudo pacman -S quickshell inotify-tools procps
 Stop the plugin and remove the files:
 
 ```bash
-rm ~/.config/opencode/plugins/mascot.ts
+rm -rf ~/.config/opencode/plugins/mascot
 rm ~/.config/quickshell/inir/scripts/opencode-mascot-focus.sh
 ```
 

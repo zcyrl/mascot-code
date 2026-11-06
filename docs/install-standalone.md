@@ -17,7 +17,7 @@ That copies:
 - `standalone/shell.qml` → `~/.config/quickshell/mascot-code/shell.qml`
 - `characters/Empo.qml` and `characters/Clawd.qml` →
   `~/.config/quickshell/mascot-code/characters/`
-- `opencode/mascot.ts` → `~/.config/opencode/plugins/mascot.ts`
+- `opencode/mascot/` → `~/.config/opencode/plugins/mascot/`
 - the user service → `~/.config/systemd/user/mascot-code.service`
 
 Start it:
@@ -41,6 +41,11 @@ MASCOT_CHARACTER=clawd qs -p ~/.config/quickshell/mascot-code
 
 For the systemd service, put `Environment=MASCOT_CHARACTER=clawd` in a drop-in
 or edit the unit. The default is Empo.
+
+The same choice is available visually: type `/mascot` in OpenCode. The picker
+writes `~/.config/mascot-code/character.json`, which takes precedence over
+`MASCOT_CHARACTER`. The standalone overlay watches that file and switches live.
+The desktop card needs OpenCode Desktop 2.2+; the TUI card works on 2.x.
 
 ## Requirements
 
@@ -75,6 +80,6 @@ support yet.
 systemctl --user disable --now mascot-code.service
 rm -rf ~/.config/quickshell/mascot-code
 rm ~/.config/systemd/user/mascot-code.service
-rm ~/.config/opencode/plugins/mascot.ts
+rm -rf ~/.config/opencode/plugins/mascot
 systemctl --user daemon-reload
 ```

@@ -3,6 +3,10 @@ dist/
 *.tar.gz
 *.zip
 
+# GUI build dependencies
+gui/node_modules/
+gui/.vite/
+
 # Local logs and caches
 *.log
 __pycache__/

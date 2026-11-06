@@ -78,7 +78,7 @@ function writeState(sessionID: string, state: SessionState): number {
     } catch {
       // Best effort cleanup only.
     }
-    console.error("[opencode-mascot] failed to write state:", error)
+    console.error("[mascot-code] failed to write state:", error)
   }
 
   return ts
@@ -174,7 +174,7 @@ function stateForTool(tool: string): MascotState {
 }
 
 export default Plugin.define({
-  id: "opencode.mascot",
+  id: "zcyrl.mascot",
   async setup(ctx) {
     // Recover the active session on plugin hot-reload instead of showing
     // an unrelated idle state until the next prompt.
@@ -215,7 +215,7 @@ export default Plugin.define({
         activeSessionID = id
       }
     } catch (error) {
-      console.warn("[opencode-mascot] could not discover the active session:", error)
+      console.warn("[mascot-code] could not discover the active session:", error)
     }
 
     if (activeSessionID) activate(activeSessionID)
@@ -300,11 +300,11 @@ export default Plugin.define({
         }
       } catch (error) {
         if (!controller.signal.aborted)
-          console.error("[opencode-mascot] event subscription failed:", error)
+          console.error("[mascot-code] event subscription failed:", error)
       }
     })()
 
-    console.log("[opencode-mascot] plugin loaded")
+    console.log("[mascot-code] plugin loaded")
 
     return () => {
       controller.abort()
