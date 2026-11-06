@@ -15,7 +15,7 @@ export default Plugin.define({
   i18n: {
     en: {
       "command.choose": "Choose mascot",
-      "command.description": "Preview Empo and Clawd, then pick one",
+      "command.description": "Preview Empo and Claude, then pick one",
       "dialog.title": "Choose your mascot",
       "dialog.description": "Each card cycles its expressions while you hover.",
       "dialog.close": "Close",
@@ -55,11 +55,10 @@ export default Plugin.define({
               >
                 <MascotPicker
                   current={current}
-                  onClose={dialog.close}
                   onPick={async (character) => {
                     try {
                       await ipc.set(character, { signal: ctx.signal })
-                      const name = character === "clawd" ? "Clawd" : "Empo"
+                      const name = character === "clawd" ? "Claude" : "Empo"
                       ctx.toast.show({
                         variant: "success",
                         title: ctx.t("toast.selected"),

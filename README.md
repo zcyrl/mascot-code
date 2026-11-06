@@ -3,7 +3,7 @@
 [![Release](https://img.shields.io/github/v/release/zcyrl/mascot-code?label=release)](https://github.com/zcyrl/mascot-code/releases)
 [![License: GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-blue)](LICENSE)
 
-A small desktop mascot for [OpenCode](https://opencode.ai). **Empo** is the glowing compass-star; **Clawd** is the blocky orange crab from Claude Code. Both read the same state file and share the same nine expressions.
+A small desktop mascot for [OpenCode](https://opencode.ai). **Empo** is the glowing compass-star; **Claude** is the blocky orange crab from Claude Code. Both read the same state file and share the same nine expressions.
 
 I use OpenCode a lot, and I wanted something that shows what the agent is actually doing without me staring at the terminal the whole time. The Claude Code mascot was the inspiration, but I'm on Linux, so this is a Quickshell layer-shell overlay instead of an Electron app. No npm, no browser, no GTK window pretending to be a pet.
 
@@ -13,9 +13,9 @@ Empo is a glowing compass-star. He reads files, types, runs commands, browses do
 
 ## Two characters
 
-**Empo** is the original: a glowing compass-star with a keyboard, a book and a globe. **Clawd** is Anthropic's pixel crab, redrawn in QML with the same nine poses. Same state file, same plugin, same overlay; only the drawing changes.
+**Empo** is the original: a glowing compass-star with a keyboard, a book and a globe. **Claude** is Anthropic's pixel crab, redrawn in QML with the same nine poses. Same state file, same plugin, same overlay; only the drawing changes.
 
-![Clawd coding](assets/clawd-coding.png)
+![Claude coding](assets/clawd-coding.png)
 
 Switch at runtime:
 
@@ -28,7 +28,7 @@ Or set `mascot.codingCompanion.character` in `~/.config/inir/config.json`. The s
 
 ## Pick with `/mascot`
 
-In the OpenCode TUI, type `/mascot`. In OpenCode Desktop, type it in the composer or pick **Choose mascot** from the command palette. A floating card shows Empo and Clawd; hover a card to watch it cycle through its nine expressions, then click it to choose.
+In the OpenCode TUI, type `/mascot`. In OpenCode Desktop, type it in the composer or pick **Choose mascot** from the command palette. A floating card shows Empo and Claude; hover a card to watch it cycle through its nine expressions, then click it to choose.
 
 The picker is one plugin with three parts:
 
@@ -65,15 +65,15 @@ Tools are often faster than the eye. The mascot holds an action for about 1.2 se
 | --- | --- |
 | ![Empo happy](assets/empo-happy.png) | ![Empo sleeping](assets/empo-sleeping.png) |
 
-### Clawd
+### Claude
 
 | Coding | Browsing |
 | --- | --- |
-| ![Clawd coding](assets/clawd-coding.png) | ![Clawd browsing](assets/clawd-browsing.png) |
+| ![Claude coding](assets/clawd-coding.png) | ![Claude browsing](assets/clawd-browsing.png) |
 
 | Happy | Sleeping |
 | --- | --- |
-| ![Clawd happy](assets/clawd-happy.png) | ![Clawd sleeping](assets/clawd-sleeping.png) |
+| ![Claude happy](assets/clawd-happy.png) | ![Claude sleeping](assets/clawd-sleeping.png) |
 
 ## How it works
 
@@ -81,7 +81,7 @@ There are three pieces:
 
 1. **The OpenCode plugin** writes the current state to `/tmp/opencode-mascot.json`.
 2. **The Quickshell overlay** watches that file and draws the selected mascot.
-3. **The character layer** maps the state to an expression. Empo was the first character; Clawd is the second, and the switchboard is built for more.
+3. **The character layer** maps the state to an expression. Empo was the first character; Claude is the second, and the switchboard is built for more.
 
 The state file looks like this:
 
@@ -210,11 +210,11 @@ echo '{"state":"sad","detail":"tool failed"}'           > /tmp/opencode-mascot.j
 echo '{"state":"sleeping","detail":""}'                 > /tmp/opencode-mascot.json
 ```
 
-If you omit `ts`, the mascot treats it as "just now" and the 60-second sleep still works. The state file is character-agnostic: these commands work for Empo and Clawd alike.
+If you omit `ts`, the mascot treats it as "just now" and the 60-second sleep still works. The state file is character-agnostic: these commands work for Empo and Claude alike.
 
 ## Adding characters and animations
 
-Empo and Clawd are not hardcoded into the companion. `CharacterHost.qml` is the switchboard, and `characters/` is where characters live.
+Empo and Claude are not hardcoded into the companion. `CharacterHost.qml` is the switchboard, and `characters/` is where characters live.
 
 A character is a QML component with this contract:
 
@@ -237,7 +237,7 @@ To add one:
    inir ipc mascot character yourcharacter
    ```
 
-Empo himself is `inir/modules/mascot/characters/Empo.qml`. The file is 800 lines of pure QML: a static Canvas for the star and glow, QML items for the face, and transform/opacity animations for the rest. Clawd is `characters/Clawd.qml`: a 300x300 pixel-art stage of plain rectangles, scaled to the sprite size, so the blocks stay crisp. You can copy either one as a starting point. See [`inir/modules/mascot/characters/README.md`](inir/modules/mascot/characters/README.md) for the details.
+Empo himself is `inir/modules/mascot/characters/Empo.qml`. The file is 800 lines of pure QML: a static Canvas for the star and glow, QML items for the face, and transform/opacity animations for the rest. Claude is drawn by `characters/Clawd.qml`: a 300x300 pixel-art stage of plain rectangles, scaled to the sprite size, so the blocks stay crisp. You can copy either one as a starting point. See [`inir/modules/mascot/characters/README.md`](inir/modules/mascot/characters/README.md) for the details.
 
 ## Troubleshooting
 
@@ -281,16 +281,16 @@ systemctl --user stop mascot-code.service
 
 GPL-3.0-only. That is the "same project, keep my name on it" license — strong copyleft. If you fork it, modify it, or ship it, the derivative stays under GPL-3.0 and keeps the notices.
 
-`MascotCompanion.qml` is derived from iNiR's mascot companion, which is also GPL-3.0. The upstream project is [snowarch/iNiR](https://github.com/snowarch/iNiR). Empo, Clawd's QML interpretation, the OpenCode plugin, the standalone overlay and the installer scripts are original work by [Softbrick (zcyrl)](https://github.com/zcyrl), released under the same license.
+`MascotCompanion.qml` is derived from iNiR's mascot companion, which is also GPL-3.0. The upstream project is [snowarch/iNiR](https://github.com/snowarch/iNiR). Empo, Claude's QML interpretation, the OpenCode plugin, the standalone overlay and the installer scripts are original work by [Softbrick (zcyrl)](https://github.com/zcyrl), released under the same license.
 
-Clawd is Anthropic's character for Claude Code. This project is an unofficial fan interpretation, not affiliated with or endorsed by Anthropic. The code is GPL-3.0; the character and trademark remain Anthropic's.
+Claude is Anthropic's character for Claude Code. This project is an unofficial fan interpretation, not affiliated with or endorsed by Anthropic. The code is GPL-3.0; the character and trademark remain Anthropic's.
 
 See [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE).
 
 ## Credits
 
-- **Softbrick (zcyrl)** — Empo, Clawd's QML, plugin, overlay, glue and the late-night debugging.
-- **Anthropic** — Clawd and the Claude Code mascot this homage is based on.
+- **Softbrick (zcyrl)** — Empo, Claude's QML, plugin, overlay, glue and the late-night debugging.
+- **Anthropic** — Claude and the Claude Code mascot this homage is based on.
 - **iNiR / snowarch** — the mascot companion foundation, settings conventions and the GPL-3.0 base.
 - **OpenCode** — the agent and its plugin API.
 - **Quickshell** — the thing that makes a transparent Wayland overlay this easy.

@@ -17,7 +17,7 @@ than 60 seconds, the overlay shows `sleeping` even if the state still says
 
 ## Mapping
 
-| State | Empo | Clawd | Bubble |
+| State | Empo | Claude | Bubble |
 | --- | --- | --- | --- |
 | `idle` | blinking, gentle bob | blinking, little body bob | hidden |
 | `thinking` | looks up, floating `?` | eyes up, floating `?` | `thinking...` or `thinking after reading main.py` |

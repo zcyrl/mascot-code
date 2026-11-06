@@ -303,7 +303,7 @@ export default Plugin.define({
                 {
                     id: "zcyrl.mascot.choose",
                     title: "Choose mascot",
-                    description: "Preview Empo and Clawd, then pick one",
+                    description: "Preview Empo and Claude, then pick one",
                     group: "Mascot Code",
                     palette: true,
                     slash: { name: "mascot" },

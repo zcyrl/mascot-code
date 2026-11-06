@@ -15,7 +15,7 @@ opencode/mascot/index.ts
 Quickshell overlay
   │  expression + detail
   ▼
-CharacterHost → Empo / Clawd
+CharacterHost → Empo / Claude
 ```
 
 The same plugin package also has `tui.tsx` (the terminal `/mascot` card) and
@@ -99,7 +99,7 @@ The module lives in `~/.config/quickshell/inir/modules/mascot/`.
   mode, the session watcher and the focus rules.
 - `CharacterHost.qml` picks the character component.
 - `characters/Empo.qml` draws Empo.
-- `characters/Clawd.qml` draws the Claude Code crab.
+- `characters/Clawd.qml` draws the Claude Code crab. The component keeps its older `Clawd` name.
 - `scripts/opencode-mascot-focus.sh` answers `none`, `focused` or `unfocused`
   by walking the process tree from `opencode` up to the focused niri window PID.
 

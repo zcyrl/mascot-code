@@ -33,7 +33,7 @@ Or run it directly:
 qs -p ~/.config/quickshell/mascot-code
 ```
 
-Select Clawd with an environment override:
+Select Claude with an environment override:
 
 ```bash
 MASCOT_CHARACTER=clawd qs -p ~/.config/quickshell/mascot-code
@@ -66,7 +66,7 @@ once a second.
 | hide while OpenCode focused | yes, via niri | no |
 | hide when OpenCode exits | yes | yes |
 | inotify state updates | yes | 1 Hz `cat` |
-| theme | iNiR wallpaper palette | built-in Empo palette; Clawd keeps Claude orange |
+| theme | iNiR wallpaper palette | built-in Empo palette; Claude keeps Claude orange |
 | character selection | `mascot.codingCompanion.character` | `MASCOT_CHARACTER=empo` or `clawd` |
 | settings UI | iNiR Settings | none; env/file only |
 

@@ -1290,14 +1290,15 @@ Scope {
     }
 
     // Decide whether the coding companion should be on screen at all.
-    // `opencode` is the TUI process; if its ancestor chain contains the
-    // focused Niri window's PID, that terminal is focused and the mascot
-    // steps out of the way. Focus changes probe immediately; a slow timer
-    // catches OpenCode starting or exiting while focus stays put.
+    // OpenCode can be a terminal TUI or the desktop app. When the focused
+    // window is either one, the mascot steps out of the way. Focus changes
+    // probe immediately; a slow timer catches OpenCode starting or exiting
+    // while focus stays put.
     Process {
         id: openCodeProbe
         command: ["bash", Quickshell.shellPath("scripts/opencode-mascot-focus.sh"),
-                  String(NiriService.activeWindow?.pid ?? "")]
+                  String(NiriService.activeWindow?.pid ?? ""),
+                  String(NiriService.activeWindow?.app_id ?? "")]
         stdout: SplitParser {
             onRead: line => root._applyOpenCodeProbe(line)
         }

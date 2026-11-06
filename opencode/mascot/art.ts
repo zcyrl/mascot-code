@@ -23,8 +23,8 @@ export const MASCOTS: readonly MascotInfo[] = [
   },
   {
     "id": "clawd",
-    "name": "Clawd",
-    "tagline": "The Claude Code crab",
+    "name": "Claude",
+    "tagline": "The Claude Code mascot",
     "accent": "#d77856"
   }
 ]

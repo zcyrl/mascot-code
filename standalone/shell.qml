@@ -85,11 +85,13 @@ ShellRoot {
         }
     }
 
-    // Is a terminal-hosted OpenCode TUI running? Polling pgrep is cheap and
-    // works on every distro; no inotifywait dependency in this build.
+    // Is OpenCode running? A terminal TUI counts, and so does the desktop
+    // app. Skip `opencode serve --service`, the desktop backend that stays
+    // alive after the app window closes. Polling is cheap and works on every
+    // distro; no inotifywait dependency in this build.
     Process {
         id: openCodeProbe
-        command: ["pgrep", "-x", "opencode"]
+        command: ["bash", "-c", "for pid in $(pgrep -x opencode 2>/dev/null); do cmd=$(ps -o args= -p \"$pid\" 2>/dev/null); case \" $cmd \" in *\" serve \"*) continue ;; esac; exit 0; done; pgrep -f 'opencode-desktop|ai.opencode.desktop' >/dev/null 2>&1"]
         onExited: exitCode => root.openCodeRunning = (exitCode === 0)
     }
     Timer {

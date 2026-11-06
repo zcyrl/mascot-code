@@ -1,4 +1,4 @@
-import { createEffect, createSignal, For, onCleanup } from "solid-js"
+import { createEffect, createSignal, For, onCleanup, onMount } from "solid-js"
 import {
   MASCOT_FRAMES,
   MASCOT_STATES,
@@ -11,19 +11,30 @@ const FRAME_MS = 1400
 export function MascotPicker(props: {
   current: () => MascotId
   onPick: (character: MascotId) => void | Promise<void>
-  onClose: () => void
 }) {
   const [hovered, setHovered] = createSignal<MascotId | null>(null)
+  const [selected, setSelected] = createSignal<MascotId>(props.current())
   const [frames, setFrames] = createSignal<Record<MascotId, number>>({ empo: 0, clawd: 0 })
   const [saving, setSaving] = createSignal(false)
+  const cards: Partial<Record<MascotId, HTMLButtonElement>> = {}
 
   function startPreview(character: MascotId) {
+    setSelected(character)
     setHovered(character)
     setFrames((current) => ({ ...current, [character]: 0 }))
   }
 
   function stopPreview(character: MascotId) {
     if (hovered() === character) setHovered(null)
+  }
+
+  function move(delta: number) {
+    const index = MASCOTS.findIndex((mascot) => mascot.id === selected())
+    const next = MASCOTS[(index + delta + MASCOTS.length) % MASCOTS.length]
+    if (!next) return
+    setSelected(next.id)
+    startPreview(next.id)
+    cards[next.id]?.focus()
   }
 
   async function choose(character: MascotId) {
@@ -35,6 +46,36 @@ export function MascotPicker(props: {
       setSaving(false)
     }
   }
+
+  function handleKeyDown(event: KeyboardEvent) {
+    if (event.ctrlKey || event.metaKey || event.altKey) return
+    if (event.key === "ArrowLeft") {
+      event.preventDefault()
+      event.stopPropagation()
+      move(-1)
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault()
+      event.stopPropagation()
+      move(1)
+    } else if (event.key === "Enter") {
+      event.preventDefault()
+      event.stopPropagation()
+      void choose(selected())
+    }
+  }
+
+  onMount(() => {
+    // Capture at the window so the host's global navigation cannot steal the
+    // arrow keys or close the dialog before the cards see them.
+    window.addEventListener("keydown", handleKeyDown, true)
+    const focus = () => cards[props.current()]?.focus()
+    requestAnimationFrame(focus)
+    const retry = setTimeout(focus, 120)
+    onCleanup(() => {
+      clearTimeout(retry)
+      window.removeEventListener("keydown", handleKeyDown, true)
+    })
+  })
 
   createEffect(() => {
     const character = hovered()
@@ -49,9 +90,20 @@ export function MascotPicker(props: {
   })
 
   return (
-    <div class="mascot-code-picker">
+    <div
+      class="mascot-code-picker"
+      onKeyDown={(event) => {
+        if (event.key === "ArrowLeft") {
+          event.preventDefault()
+          move(-1)
+        } else if (event.key === "ArrowRight") {
+          event.preventDefault()
+          move(1)
+        }
+      }}
+    >
       <p class="mascot-code-hint">
-        Hover a mascot to preview all nine expressions. Click one to make it the coding companion.
+        Hover to preview all nine expressions. Use ← → and Enter, or click a card.
       </p>
       <div class="mascot-code-grid">
         <For each={MASCOTS}>
@@ -66,6 +118,9 @@ export function MascotPicker(props: {
                 aria-pressed={active()}
                 aria-label={`Choose ${mascot.name}`}
                 autofocus={active()}
+                ref={(element) => {
+                  cards[mascot.id] = element
+                }}
                 onMouseEnter={() => startPreview(mascot.id)}
                 onMouseLeave={() => stopPreview(mascot.id)}
                 onFocus={() => startPreview(mascot.id)}
@@ -92,12 +147,6 @@ export function MascotPicker(props: {
             )
           }}
         </For>
-      </div>
-      <div class="mascot-code-foot">
-        <span>Current: {props.current()}</span>
-        <button type="button" class="mascot-code-close" onClick={props.onClose}>
-          Close
-        </button>
       </div>
     </div>
   )
