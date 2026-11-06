@@ -1319,6 +1319,12 @@ Scope {
             if (root.codingMode && !openCodeProbe.running)
                 openCodeProbe.running = true
         }
+        // Closing OpenCode is a window change, not necessarily a focus change.
+        // Probe right away so the mascot leaves with the window.
+        function onWindowsChanged() {
+            if (root.codingMode && !openCodeProbe.running)
+                openCodeProbe.running = true
+        }
     }
 
     // OpenCode writes the state file with temp-file + rename, so the inode

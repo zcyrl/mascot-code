@@ -2,7 +2,9 @@
 
 This is the Arch + niri + [iNiR](https://github.com/snowarch/iNiR) build. It
 adds the coding mode to iNiR's existing mascot companion and uses niri to hide
-the mascot while the OpenCode terminal is focused.
+the mascot while an OpenCode window is focused. It also hides the mascot once
+no OpenCode window is open, even if a background server or terminal pane is
+still running.
 
 Either Empo or Claude can be selected; the default is Empo. Type `/mascot` in OpenCode (TUI or Desktop 2.2+) for the visual picker.
 

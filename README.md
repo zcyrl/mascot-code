@@ -173,9 +173,10 @@ If the installer warns that `codingCompanion` is missing from `Config.qml`, add 
 
 On niri + iNiR, the behaviour is:
 
-- OpenCode is running in a terminal, terminal **not** focused → the mascot appears.
-- OpenCode terminal **focused** → the mascot slides away.
-- OpenCode exits → the mascot disappears.
+- OpenCode is open (TUI or Desktop), its window **not** focused → the mascot appears.
+- OpenCode window **focused** → the mascot slides away.
+- OpenCode closes → the mascot disappears, even if a background server or a
+  multiplexer pane survives the window.
 - DND, fullscreen, lock screen, session screen, region selector, recording → the mascot stays hidden.
 
 ### 3B. Install the standalone version
