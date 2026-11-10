@@ -2,6 +2,17 @@
 
 All notable changes to Mascot Code are documented here.
 
+## Unreleased
+
+### Fixed
+
+- The `/mascot` picker labels the Claude card correctly, fits the desktop
+  dialog without clipping, and moves between cards with the arrow keys.
+- The companion hides while OpenCode Desktop is focused, and its background
+  server is no longer mistaken for a running TUI.
+- The mascot disappears when the last OpenCode window closes, even if the
+  desktop server or a terminal multiplexer pane outlives the window.
+
 ## v1.2.0 — 2026-11-06
 
 The mascot picker.
