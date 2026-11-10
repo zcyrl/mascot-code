@@ -1,0 +1,11 @@
+{
+  "id": "mascot",
+  "kind": "component",
+  "name": "Mascot Code",
+  "summary": "Empo and Claude follow the OpenCode session from a screen edge.",
+  "version": "1.3.0",
+  "provides": "modules/mascot",
+  "parts": {
+    "panel": "MascotCompanion.qml"
+  }
+}

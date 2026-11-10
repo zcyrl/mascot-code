@@ -39,8 +39,25 @@ inir logs -n 200
 ```
 
 Usually this is a QML compile error in the module, a missing `CharacterHost.qml`,
-or the `characters/` directory not being copied. Both `Clawd.qml` and the
+or the `characters/` directory not being copied. Both `Claude.qml` and the
 `characters/qmldir` entry are required.
+
+On iNiR 3, check that the component is registered:
+
+```bash
+ls ~/.config/quickshell/inir/modules/mascot/plugin.json
+grep -x mascot ~/.config/quickshell/inir/plugins.list
+```
+
+If either is missing, run `./install-inir.sh` and `inir restart`. iNiR updates
+may remove local folders under `modules/`, so re-run the installer after an
+update.
+
+## `inir ipc mascotcode status` says "Target not found"
+
+The component did not load. Run `inir restart`, then check the log above. On
+iNiR 2 the target is `mascot`; that version loads the module directly instead of
+through `plugin.json`.
 
 ## The bubble updates but the mascot is hidden
 
@@ -50,7 +67,7 @@ is intentional. Focus another window to see it.
 Check:
 
 ```bash
-inir ipc mascot status
+inir ipc mascotcode status
 ```
 
 Look at `coding.openCodeFocused` and `showing`.
@@ -59,13 +76,13 @@ Look at `coding.openCodeFocused` and `showing`.
 
 ```bash
 cat ~/.config/mascot-code/character.json
-inir ipc mascot character clawd
-inir ipc mascot status
+inir ipc mascotcode character claude
+inir ipc mascotcode status
 ```
 
-The shared picker file wins over the config. If the picker changes it but the
-overlay still shows the old character, the running iNiR module is older than
-this repo: run `./install-inir.sh` and `inir restart` once.
+The shared picker file wins over `~/.config/mascot-code/config.json`. If the
+picker changes it but the overlay still shows the old character, the running iNiR
+module is older than this repo: run `./install-inir.sh` and `inir restart` once.
 
 If the name is accepted but the old character stays after that, the installed
 `CharacterHost.qml` and `characters/` are out of sync with this repo. Re-run
@@ -103,7 +120,9 @@ The standalone build does not need it.
 
 ## Two mascots
 
-You are running both builds. Stop the standalone service:
+Mascot Code shows a second peeking mascot beside iNiR 3's own companion only if
+`peek` is true in `~/.config/mascot-code/config.json`. Set it to `false` (the
+installer does). If you are also running the standalone build, stop its service:
 
 ```bash
 systemctl --user stop mascot-code.service

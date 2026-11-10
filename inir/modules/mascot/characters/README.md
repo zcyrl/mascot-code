@@ -1,6 +1,6 @@
 # Characters
 
-Empo lives here, and now Clawd does too.
+Empo lives here, and now Claude does too.
 
 `CharacterHost.qml` picks the component. The companion only knows about the
 state string; a character owns the art and the animation.
@@ -8,8 +8,9 @@ state string; a character owns the art and the animation.
 Built-ins:
 
 - `Empo.qml` — the glowing compass-star, Canvas body + QML face.
-- `Clawd.qml` — the blocky orange Claude Code crab, 300x300 pixel-art stage of
-  plain rectangles. `clawd` and `claude` both select it.
+- `Claude.qml` — the blocky orange Claude Code crab, 300x300 pixel-art stage of
+  plain rectangles. `claude` selects it; the older `clawd` spelling is still
+  accepted.
 
 ## Contract
 
@@ -48,13 +49,13 @@ property color mutedColor
 property string fontFamily
 ```
 
-Characters can ignore those and ship their own palette. Clawd does: a
-wallpaper-tinted crab stops looking like Clawd. The standalone build sets the
-Empo palette explicitly and lets Clawd keep his fixed Claude orange.
+Characters can ignore those and ship their own palette. Claude does: a
+wallpaper-tinted crab stops looking like Claude. The standalone build sets the
+Empo palette explicitly and lets Claude keep his fixed Claude orange.
 
 ## Add a character
 
-1. Copy `Empo.qml` or `Clawd.qml` to `YourCharacter.qml`.
+1. Copy `Empo.qml` or `Claude.qml` to `YourCharacter.qml`.
 2. Change the drawing and expressions.
 3. Add the type to `qmldir`:
    ```text
@@ -83,7 +84,7 @@ Empo palette explicitly and lets Clawd keep his fixed Claude orange.
 5. Add it to `_componentFor()`.
 6. Select it:
    ```bash
-   inir ipc mascot character yourcharacter
+   inir ipc mascotcode character yourcharacter
    ```
 
 For a standalone preview, set `MASCOT_CHARACTER=yourcharacter` after adding the

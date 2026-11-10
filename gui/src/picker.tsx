@@ -14,7 +14,7 @@ export function MascotPicker(props: {
 }) {
   const [hovered, setHovered] = createSignal<MascotId | null>(null)
   const [selected, setSelected] = createSignal<MascotId>(props.current())
-  const [frames, setFrames] = createSignal<Record<MascotId, number>>({ empo: 0, clawd: 0 })
+  const [frames, setFrames] = createSignal<Record<MascotId, number>>({ empo: 0, claude: 0 })
   const [saving, setSaving] = createSignal(false)
   const cards: Partial<Record<MascotId, HTMLButtonElement>> = {}
 

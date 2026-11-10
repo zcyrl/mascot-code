@@ -7,7 +7,7 @@ import css from "./styles.css?inline"
 
 function normalizeCharacter(value: unknown): MascotId {
   const text = String(value ?? "").toLowerCase()
-  if (text === "clawd" || text === "claude") return "clawd"
+  if (text === "clawd" || text === "claude") return "claude"
   return "empo"
 }
 
@@ -58,7 +58,7 @@ export default Plugin.define({
                   onPick={async (character) => {
                     try {
                       await ipc.set(character, { signal: ctx.signal })
-                      const name = character === "clawd" ? "Claude" : "Empo"
+                      const name = character === "claude" ? "Claude" : "Empo"
                       ctx.toast.show({
                         variant: "success",
                         title: ctx.t("toast.selected"),

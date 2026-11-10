@@ -1,11 +1,11 @@
 # Mascot Code v1.2.0 — Choose your mascot
 
 Mascot Code now has a picker. Type `/mascot` in OpenCode and choose between
-**Empo** and **Clawd** without editing config by hand.
+**Empo** and **Claude** without editing config by hand.
 
 ## What's in it
 
-- **`/mascot` in the TUI**: a floating card with Empo and Clawd. Hover either
+- **`/mascot` in the TUI**: a floating card with Empo and Claude. Hover either
   mascot to cycle all nine expressions every 1.4 seconds, then click or press
   Enter to choose.
 - **`/mascot` in OpenCode Desktop 2.2+**: the same picker as a native desktop
@@ -73,7 +73,7 @@ removed by the installer.
 
 - The desktop `/mascot` card uses the experimental GUI plugin API introduced in
   OpenCode Desktop 2.2. The TUI picker works on OpenCode 2.x regardless.
-- Clawd is Anthropic's mascot. This is an unofficial fan interpretation; the
+- Claude is Anthropic's mascot. This is an unofficial fan interpretation; the
   code is GPL-3.0-only and the character marks remain Anthropic's.
 - If the iNiR choice does not change after picking, run `inir restart` once to
   load the updated module, then select again.

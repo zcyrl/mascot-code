@@ -15,16 +15,18 @@ Empo is a glowing compass-star. He reads files, types, runs commands, browses do
 
 **Empo** is the original: a glowing compass-star with a keyboard, a book and a globe. **Claude** is Anthropic's pixel crab, redrawn in QML with the same nine poses. Same state file, same plugin, same overlay; only the drawing changes.
 
-![Claude coding](assets/clawd-coding.png)
+![Claude coding](assets/claude-coding.png)
 
 Switch at runtime:
 
 ```bash
-inir ipc mascot character clawd
-inir ipc mascot character empo
+inir ipc mascotcode character claude
+inir ipc mascotcode character empo
 ```
 
-Or set `mascot.codingCompanion.character` in `~/.config/inir/config.json`. The standalone build uses `MASCOT_CHARACTER=clawd` (or `empo`) when you start it.
+Or set `character` in `~/.config/mascot-code/config.json`. The shared picker file
+`~/.config/mascot-code/character.json` wins over both. The standalone build uses
+`MASCOT_CHARACTER=claude` (or `empo`) when you start it.
 
 ## Pick with `/mascot`
 
@@ -69,11 +71,11 @@ Tools are often faster than the eye. The mascot holds an action for about 1.2 se
 
 | Coding | Browsing |
 | --- | --- |
-| ![Claude coding](assets/clawd-coding.png) | ![Claude browsing](assets/clawd-browsing.png) |
+| ![Claude coding](assets/claude-coding.png) | ![Claude browsing](assets/claude-browsing.png) |
 
 | Happy | Sleeping |
 | --- | --- |
-| ![Claude happy](assets/clawd-happy.png) | ![Claude sleeping](assets/clawd-sleeping.png) |
+| ![Claude happy](assets/claude-happy.png) | ![Claude sleeping](assets/claude-sleeping.png) |
 
 ## How it works
 
@@ -104,7 +106,7 @@ The plugin also tracks **per-session** state and follows the session selected in
 - OpenCode Desktop 2.2 or newer for the desktop `/mascot` card. The 2.1.x desktop app has no GUI plugin API yet; the TUI picker works there regardless.
 - Quickshell 0.3 or newer. Tested on `0.3.2`.
 - A Wayland compositor with layer-shell.
-  - **Focus-aware hiding** needs niri + iNiR. That version talks to `niri msg`.
+  - **Focus-aware hiding** needs niri + iNiR 3 (or iNiR 2). That version talks to `niri msg`.
   - **Everything else** works in the standalone build on Hyprland, Sway, river, and friends.
 - `procps` (`pgrep`, `ps`) and, for the iNiR build, `inotify-tools` (`inotifywait`).
 - No npm install. The plugin imports `@opencode/plugin` from the OpenCode runtime.
@@ -147,7 +149,8 @@ Run OpenCode in another terminal and ask it to read and edit a file. The state s
 
 ### 3A. Install the iNiR version
 
-Use this if you are on niri with iNiR. It gives you the focus-aware hide/show behaviour.
+Use this if you are on niri with iNiR 3 (or the older iNiR 2). It gives you the
+focus-aware hide/show behaviour.
 
 ```bash
 ./install-inir.sh
@@ -158,18 +161,23 @@ The installer backs up your existing mascot module and config first. It copies:
 - `opencode/mascot/` → `~/.config/opencode/plugins/mascot/`
 - `inir/modules/mascot/` → `~/.config/quickshell/inir/modules/mascot/`
 - `inir/scripts/opencode-mascot-focus.sh` → `~/.config/quickshell/inir/scripts/`
-- adds `mascot.codingCompanion` to `~/.config/inir/config.json` if it isn't there
+- writes `~/.config/mascot-code/config.json`
+- on iNiR 3, registers `mascot` in `~/.config/quickshell/inir/plugins.list`
+- on iNiR 2, adds `mascot.codingCompanion` to `~/.config/inir/config.json`
 
 Then:
 
 ```bash
 inir restart
-inir ipc mascot coding true
-inir ipc mascot character empo
-inir ipc mascot status
+inir ipc mascotcode status
+inir ipc mascotcode character empo
 ```
 
-If the installer warns that `codingCompanion` is missing from `Config.qml`, add the snippet from [`inir/config/Config-schema.qml`](inir/config/Config-schema.qml) to the `mascot` object. The settings toggle lives in `MascotConfig.qml` and `WMascotPage.qml`; the IPC command works without it.
+iNiR 3 loads Mascot Code as a **component plugin** (`plugin.json`), so it lives
+beside iNiR's own mascot instead of replacing it. Its IPC target is
+`mascotcode`; iNiR's own companion keeps `mascot`. On iNiR 2, add the snippet
+from [`inir/config/Config-schema.qml`](inir/config/Config-schema.qml) to the
+`mascot` object in `Config.qml` if the installer says the key is missing.
 
 On niri + iNiR, the behaviour is:
 
@@ -233,12 +241,13 @@ To add one:
 1. Drop `characters/YourCharacter.qml` into `inir/modules/mascot/characters/`.
 2. Add `YourCharacter 1.0 YourCharacter.qml` to that directory's `qmldir`.
 3. Add a `Component` and a `case` in `CharacterHost.qml`.
-4. Set `mascot.codingCompanion.character` to `"yourcharacter"` or use
+4. Set `character` in `~/.config/mascot-code/config.json` to `"yourcharacter"`
+   or use
    ```bash
-   inir ipc mascot character yourcharacter
+   inir ipc mascotcode character yourcharacter
    ```
 
-Empo himself is `inir/modules/mascot/characters/Empo.qml`. The file is 800 lines of pure QML: a static Canvas for the star and glow, QML items for the face, and transform/opacity animations for the rest. Claude is drawn by `characters/Clawd.qml`: a 300x300 pixel-art stage of plain rectangles, scaled to the sprite size, so the blocks stay crisp. You can copy either one as a starting point. See [`inir/modules/mascot/characters/README.md`](inir/modules/mascot/characters/README.md) for the details.
+Empo himself is `inir/modules/mascot/characters/Empo.qml`. The file is 800 lines of pure QML: a static Canvas for the star and glow, QML items for the face, and transform/opacity animations for the rest. Claude is drawn by `characters/Claude.qml`: a 300x300 pixel-art stage of plain rectangles, scaled to the sprite size, so the blocks stay crisp. You can copy either one as a starting point. See [`inir/modules/mascot/characters/README.md`](inir/modules/mascot/characters/README.md) for the details.
 
 ## Troubleshooting
 

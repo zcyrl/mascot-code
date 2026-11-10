@@ -21,23 +21,70 @@ import Quickshell.Wayland
 Scope {
     id: root
 
-    readonly property bool codingMode: Config.options?.mascot?.codingCompanion?.enable ?? false
     readonly property string mascotConfigDir: (Quickshell.env("XDG_CONFIG_HOME") || (Quickshell.env("HOME") + "/.config")) + "/mascot-code"
+    // Mascot Code keeps its own settings beside character.json. iNiR 3
+    // component plugins cannot add keys to iNiR's Config schema, so this file
+    // is the source of truth there; the old iNiR 2 config key stays as a
+    // fallback for installs that predate it.
+    readonly property var codingSettings: {
+        if (!codingSettingsFile.loaded) return null
+        try {
+            const data = JSON.parse(codingSettingsFile.text())
+            return data && typeof data === "object" ? data : null
+        } catch (error) {
+            return null
+        }
+    }
+    readonly property bool codingMode: {
+        if (codingSettings && typeof codingSettings.enable === "boolean")
+            return codingSettings.enable
+        return Config.options?.mascot?.codingCompanion?.enable ?? false
+    }
+    // On iNiR 3 the shell already has its own mascot companion; running the
+    // old peeking one beside it would draw two mascots. The coding companion
+    // stays on, the peek behaviour is opt-in.
+    readonly property bool peekMode: {
+        if (codingSettings && typeof codingSettings.peek === "boolean")
+            return codingSettings.peek
+        return true
+    }
+    function _setCodingSetting(key, value) {
+        let data = {}
+        if (codingSettingsFile.loaded) {
+            try {
+                const parsed = JSON.parse(codingSettingsFile.text())
+                if (parsed && typeof parsed === "object") data = parsed
+            } catch (error) {
+                // Start from an empty document when the old one is malformed.
+            }
+        }
+        data[key] = value
+        codingSettingsFile.setText(JSON.stringify(data, null, 2) + "\n")
+    }
     readonly property string sharedCharacter: {
         if (!characterFile.loaded) return ""
         try {
             const data = JSON.parse(characterFile.text())
             const value = String(data.character ?? "").toLowerCase()
-            return ["empo", "clawd", "claude"].includes(value) ? value : ""
+            // "clawd" is the spelling older pickers wrote; keep reading it.
+            if (value === "clawd") return "claude"
+            return ["empo", "claude"].includes(value) ? value : ""
         } catch (error) {
             return ""
         }
+    }
+    readonly property string activeCharacter: {
+        const value = sharedCharacter.length > 0
+            ? sharedCharacter
+            : (codingSettings?.character ?? Config.options?.mascot?.codingCompanion?.character ?? "empo")
+        return String(value).toLowerCase() === "clawd" ? "claude" : value
     }
     property bool openCodeRunning: false
     property bool openCodeFocused: false
     readonly property bool codingActive: codingMode && openCodeRunning
     readonly property bool codingVisible: codingActive && !openCodeFocused
-    readonly property bool normalCompanionEnabled: MascotCatalog.packAvailable
+    readonly property bool normalCompanionEnabled: peekMode
+        && MascotCatalog.packAvailable
         && (Config.options?.mascot?.enable ?? false)
         && (Config.options?.mascot?.companion?.enable ?? true)
     // Coding mode draws its own QML character, so it does not require the
@@ -1055,22 +1102,9 @@ Scope {
     property double _lastRompAt: 0
     readonly property bool chaosEnabled: companionEnabled && !codingMode && MascotChaos.enabled
     function startRomp(mode: string): bool {
-        if (!chaosEnabled || suppressed || rompActive) {
-            console.log(`[MascotCompanion] romp denied (chaos=${chaosEnabled} suppressed=${suppressed} active=${rompActive})`)
-            return false
-        }
-        if (!["romp", "chase", "hide", "cleanup"].includes(mode)) return false
-        if (showing || teardownTimer.running) {
-            hide()
-            _pendingRomp = mode
-            rompStartTimer.restart()
-            return true
-        }
-        _lastRompAt = Date.now()
-        _recordVisit()
-        rompMode = mode
-        rompActive = true
-        return true
+        // Mascot Code draws the coding companion only. Desktop chaos is
+        // iNiR's own mascot's job, so there is no romp surface to load here.
+        return false
     }
     Timer {
         id: rompStartTimer
@@ -1083,18 +1117,9 @@ Scope {
     }
     Loader {
         id: rompLoader
-        active: root.rompActive
-        sourceComponent: MascotRomp {
-            rompScreen: root.companionScreen
-            startMode: root.rompMode
-            onFinished: root.rompActive = false
-            // she always comes back to clean up her own destruction —
-            // a few minutes later, in a random new form
-            onWrecked: {
-                encoreTimer.interval = (120 + Math.random() * 180) * 1000
-                encoreTimer.restart()
-            }
-        }
+        // The coding companion does not ship iNiR's chaos romp. That surface
+        // stays with iNiR's own mascot; startRomp() is a no-op here.
+        active: false
     }
     Timer {
         id: encoreTimer
@@ -1165,7 +1190,9 @@ Scope {
     }
 
     IpcHandler {
-        target: "mascot"
+        // iNiR 3 already owns the "mascot" IPC target for its own companion.
+        // The coding companion answers on its own name so both can coexist.
+        target: "mascotcode"
 
         function poke(): void { root.poke() }
         // Runtime-safe personality diagnostics. Deliberately omits app/window names.
@@ -1184,6 +1211,7 @@ Scope {
                 pose: root.pose,
                 displayPose: root.displayPose,
                 line: root.line,
+                character: root.activeCharacter,
                 characterStyle: MascotCatalog.characterStyle,
                 edge: root.edge,
                 mood: MascotMood.currentMood ?? "neutral",
@@ -1225,13 +1253,13 @@ Scope {
         }
         // Coding companion without opening Settings.
         function coding(enabled: bool): string {
-            Config.setNestedValue("mascot.codingCompanion.enable", enabled)
+            root._setCodingSetting("enable", enabled)
             return enabled ? "on" : "off"
         }
         function character(name: string): string {
             const value = String(name ?? "").toLowerCase()
             if (value.length === 0) return "invalid character"
-            Config.setNestedValue("mascot.codingCompanion.character", value)
+            root._setCodingSetting("character", value)
             characterFile.setText(JSON.stringify({ character: value, updated: Date.now() }, null, 2) + "\n")
             return value
         }
@@ -1284,6 +1312,14 @@ Scope {
     FileView {
         id: characterFile
         path: root.mascotConfigDir + "/character.json"
+        watchChanges: true
+        printErrors: false
+        onFileChanged: reload()
+    }
+
+    FileView {
+        id: codingSettingsFile
+        path: root.mascotConfigDir + "/config.json"
         watchChanges: true
         printErrors: false
         onFileChanged: reload()
@@ -1534,9 +1570,7 @@ Scope {
                     anchors.fill: parent
                     visible: root.codingMode
                     active: root.codingMode && root.showing
-                    character: root.sharedCharacter.length > 0
-                        ? root.sharedCharacter
-                        : (Config.options?.mascot?.codingCompanion?.character ?? "empo")
+                    character: root.activeCharacter
                     expression: root.codingDisplayState
                     detail: root.codingDisplayDetail
                 }

@@ -1,5 +1,5 @@
 [Unit]
-Description=Mascot Code (Empo / Clawd) — OpenCode desktop mascot
+Description=Mascot Code (Empo / Claude) — OpenCode desktop mascot
 Documentation=https://github.com/zcyrl/mascot-code
 After=graphical-session.target
 PartOf=graphical-session.target

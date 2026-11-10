@@ -4,8 +4,24 @@ All notable changes to Mascot Code are documented here.
 
 ## Unreleased
 
+### Added
+
+- iNiR 3 support. The overlay now installs as a local **component plugin**
+  (`modules/mascot/plugin.json`) instead of replacing iNiR's mascot module, and
+  iNiR's own companion keeps working beside it.
+- `~/.config/mascot-code/config.json` holds the overlay's own `enable`,
+  `character` and `peek` settings. iNiR 3 component plugins cannot add keys to
+  iNiR's config schema, so the overlay no longer depends on one.
+- The coding companion's IPC target is now `mascotcode`, leaving `mascot` to
+  iNiR's own character.
+
 ### Fixed
 
+- The mascot disappeared after an iNiR 3 update because the old
+  `modules/mascot` module was removed. The installer detects iNiR 3, installs
+  the component plugin, and registers it in `plugins.list`.
+- The module no longer requires iNiR's `MascotRomp.qml`; desktop chaos belongs
+  to iNiR's mascot, and the old peeking mode is opt-in (`peek`).
 - The `/mascot` picker labels the Claude card correctly, fits the desktop
   dialog without clipping, and moves between cards with the arrow keys.
 - The companion hides while OpenCode Desktop is focused, and its background
@@ -19,7 +35,7 @@ The mascot picker.
 
 ### Added
 
-- `/mascot` in the OpenCode TUI: a floating card with Empo and Clawd. Hover a
+- `/mascot` in the OpenCode TUI: a floating card with Empo and Claude. Hover a
   card to cycle its nine expressions every 1.4 seconds; click to choose.
 - `/mascot` in OpenCode Desktop 2.2+ with the same cards and a native dialog.
 - A shared selection file at `~/.config/mascot-code/character.json`. Both
@@ -46,23 +62,23 @@ The mascot picker.
 
 ## v1.1.0 — 2026-11-06
 
-Clawd joins the companion.
+Claude joins the companion.
 
 ### Added
 
-- **Clawd**, a pixel-art QML interpretation of Anthropic's Claude Code crab:
+- **Claude**, a pixel-art QML interpretation of Anthropic's Claude Code crab:
   flat Claude-orange body, black eyes, claws and four legs, drawn on a fixed
   300x300 stage so the blocks stay crisp.
-- Nine Clawd expressions: idle, thinking, reading, coding, running, browsing,
+- Nine Claude expressions: idle, thinking, reading, coding, running, browsing,
   happy, sad and sleeping, with a page, keyboard, browser card, speed lines,
   sparkles, tear and `zZ`.
-- Select a character at runtime with `inir ipc mascot character clawd` (or
-  `empo`). `claude` is accepted as an alias for `clawd`.
-- Standalone character selection with `MASCOT_CHARACTER=clawd`. The systemd
+- Select a character at runtime with `inir ipc mascot character claude` (or
+  `empo`). The older `clawd` spelling is still accepted.
+- Standalone character selection with `MASCOT_CHARACTER=claude`. The systemd
   unit defaults to Empo.
 - `scripts/capture-character-screenshots.sh`, which renders a character on a
   clean 1100x650 black stage for documentation and does not need niri or grim.
-- Fresh black-background Clawd screenshots in `assets/`.
+- Fresh black-background Claude screenshots in `assets/`.
 
 ### Changed
 
@@ -73,7 +89,7 @@ Clawd joins the companion.
 
 ### Notes
 
-- Clawd is Anthropic's character. This is an unofficial fan interpretation, not
+- Claude is Anthropic's character. This is an unofficial fan interpretation, not
   affiliated with or endorsed by Anthropic. The GPL-3.0 license covers the QML
   code; the character and marks remain Anthropic's.
 

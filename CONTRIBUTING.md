@@ -18,7 +18,7 @@ Small project, simple rules.
    ```
    Regenerate the docs shots with:
    ```bash
-   ./scripts/capture-character-screenshots.sh clawd
+   ./scripts/capture-character-screenshots.sh claude
    ```
 5. Keep the license. New files get:
    ```text

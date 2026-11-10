@@ -1,6 +1,8 @@
-# iNiR config patches
+# iNiR 2 config patches
 
 These are the pieces the installer cannot safely patch for every iNiR version.
+**iNiR 3 does not need any of this**: it loads Mascot Code as a component plugin
+and keeps its settings in `~/.config/mascot-code/config.json`.
 
 ## 1. Schema
 
@@ -25,7 +27,7 @@ In `~/.config/quickshell/inir/defaults/config.json`, inside `"mascot"`:
 }
 ```
 
-`character` is `"empo"` or `"clawd"`. Existing user configs do not need a
+`character` is `"empo"` or `"claude"`. Existing user configs do not need a
 migration: the code falls back to `false` and `"empo"`. The installer adds the
 keys to your live config.
 
@@ -71,7 +73,7 @@ WSettingsSwitch {
 ```bash
 inir ipc mascot coding true
 inir ipc mascot coding false
-inir ipc mascot character clawd
+inir ipc mascot character claude
 inir ipc mascot character empo
 inir ipc mascot status
 ```

@@ -12,14 +12,14 @@ GPL-3.0. The upstream project is:
 
     https://github.com/snowarch/iNiR
 
-The coding-companion behaviour, Empo character, Clawd's QML interpretation,
+The coding-companion behaviour, Empo character, Claude's QML interpretation,
 OpenCode plugin, standalone Quickshell configuration, installer scripts and
 documentation in this repository are original work by Softbrick (zcyrl), also
 released under GPL-3.0-only.
 
-Clawd is a character created by Anthropic for Claude Code. This project's
+Claude is a character created by Anthropic for Claude Code. This project's
 pixel-art QML interpretation is unofficial and is not affiliated with or
-endorsed by Anthropic. The GPL-3.0 license covers this project's code; Clawd
+endorsed by Anthropic. The GPL-3.0 license covers this project's code; Claude
 and the Claude Code marks remain Anthropic's.
 
 If you fork or redistribute this project, keep the GPL-3.0 license, keep these

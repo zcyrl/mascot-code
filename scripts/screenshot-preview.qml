@@ -14,7 +14,7 @@ import "characters"
 ShellRoot {
     id: root
 
-    readonly property string character: (Quickshell.env("MASCOT_CHARACTER") || "clawd").toLowerCase()
+    readonly property string character: (Quickshell.env("MASCOT_CHARACTER") || "claude").toLowerCase()
     readonly property string state: Quickshell.env("MASCOT_STATE") || "idle"
     readonly property string output: Quickshell.env("MASCOT_OUT") || "/tmp/mascot-shot.png"
     readonly property var lines: ({
@@ -83,7 +83,7 @@ ShellRoot {
 
                 Loader {
                     anchors.fill: parent
-                    sourceComponent: root.character === "empo" ? empoComponent : clawdComponent
+                    sourceComponent: root.character === "empo" ? empoComponent : claudeComponent
                 }
             }
         }
@@ -100,8 +100,8 @@ ShellRoot {
     }
 
     Component {
-        id: clawdComponent
-        Clawd {
+        id: claudeComponent
+        Claude {
             expression: root.state
             detail: root.lines[root.state] ?? ""
             active: true

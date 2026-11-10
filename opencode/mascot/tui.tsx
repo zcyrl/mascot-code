@@ -24,7 +24,7 @@ const FRAME_MS = 1400
 
 function normalizeCharacter(value: unknown): MascotId | undefined {
     const text = String(value ?? "").toLowerCase()
-    if (text === "clawd" || text === "claude") return "clawd"
+    if (text === "clawd" || text === "claude") return "claude"
     if (text === "empo") return "empo"
     return undefined
 }
@@ -121,7 +121,7 @@ function MascotPicker(props: { context: Context; initial: MascotId }) {
     const [panel, setPanel] = createSignal<any>(undefined)
     const [selected, setSelected] = createSignal<MascotId>(props.initial)
     const [hovered, setHovered] = createSignal<MascotId | null>(null)
-    const [frames, setFrames] = createSignal<Record<MascotId, number>>({ empo: 0, clawd: 0 })
+    const [frames, setFrames] = createSignal<Record<MascotId, number>>({ empo: 0, claude: 0 })
     const [saving, setSaving] = createSignal(false)
 
     function close() {

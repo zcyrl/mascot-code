@@ -14,7 +14,7 @@ import "characters"
  * in the bottom-right corner, a character, a speech bubble, and the OpenCode
  * state file. It does not need niri, iNiR, GTK, npm or a browser.
  *
- * Pick the character with MASCOT_CHARACTER=empo or MASCOT_CHARACTER=clawd
+ * Pick the character with MASCOT_CHARACTER=empo or MASCOT_CHARACTER=claude
  * (default: empo).
  *
  * It shows while an `opencode` TUI process is running. Focus-aware hiding is
@@ -30,14 +30,19 @@ ShellRoot {
         try {
             const data = JSON.parse(characterFile.text())
             const value = String(data.character ?? "").toLowerCase()
-            return ["empo", "clawd", "claude"].includes(value) ? value : ""
+            // "clawd" is the spelling older pickers wrote; keep reading it.
+            if (value === "clawd") return "claude"
+            return ["empo", "claude"].includes(value) ? value : ""
         } catch (error) {
             return ""
         }
     }
-    readonly property string character: sharedCharacter.length > 0
-        ? sharedCharacter
-        : (Quickshell.env("MASCOT_CHARACTER") || "empo").toLowerCase()
+    readonly property string character: {
+        const value = sharedCharacter.length > 0
+            ? sharedCharacter
+            : (Quickshell.env("MASCOT_CHARACTER") || "empo").toLowerCase()
+        return value === "clawd" ? "claude" : value
+    }
     property bool openCodeRunning: false
     property string state: "idle"
     property string detail: ""
@@ -162,8 +167,8 @@ ShellRoot {
 
             Loader {
                 anchors.fill: parent
-                sourceComponent: root.character === "clawd" || root.character === "claude"
-                    ? clawdComponent
+                sourceComponent: root.character === "claude"
+                    ? claudeComponent
                     : empoComponent
             }
         }
@@ -219,8 +224,8 @@ ShellRoot {
     }
 
     Component {
-        id: clawdComponent
-        Clawd {
+        id: claudeComponent
+        Claude {
             expression: root.displayState
             detail: root.detail
             active: root.openCodeRunning

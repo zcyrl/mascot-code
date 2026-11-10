@@ -30,7 +30,7 @@ MASCOTS = [
         "accent": "#ff9ecf",
     },
     {
-        "id": "clawd",
+        "id": "claude",
         "name": "Claude",
         "tagline": "The Claude Code mascot",
         "accent": "#d77856",
@@ -65,7 +65,7 @@ def main() -> int:
         "export const MASCOT_STATES = " + json.dumps(STATES) + " as const",
         "export type MascotState = (typeof MASCOT_STATES)[number]",
         "",
-        "export type MascotId = \"empo\" | \"clawd\"",
+        "export type MascotId = \"empo\" | \"claude\"",
         "",
         "export interface MascotInfo {",
         "  readonly id: MascotId",

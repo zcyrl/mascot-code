@@ -20,8 +20,10 @@ rm -rf "${OC_PLUGIN_DIR}/mascot"
 
 cp "${ROOT}/standalone/shell.qml" "${TARGET}/shell.qml"
 cp "${ROOT}/inir/modules/mascot/characters/Empo.qml" "${TARGET}/characters/Empo.qml"
-cp "${ROOT}/inir/modules/mascot/characters/Clawd.qml" "${TARGET}/characters/Clawd.qml"
+cp "${ROOT}/inir/modules/mascot/characters/Claude.qml" "${TARGET}/characters/Claude.qml"
 cp "${ROOT}/inir/modules/mascot/characters/qmldir" "${TARGET}/characters/qmldir"
+# The character was renamed from Clawd.qml. Leave no stale component behind.
+rm -f "${TARGET}/characters/Clawd.qml"
 cp -a "${ROOT}/opencode/mascot" "${OC_PLUGIN_DIR}/mascot"
 cp "${ROOT}/packaging/systemd/mascot-code.service" "${SERVICE_DIR}/mascot-code.service"
 

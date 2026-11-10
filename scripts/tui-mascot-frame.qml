@@ -13,7 +13,7 @@ import "characters"
 ShellRoot {
     id: root
 
-    readonly property string character: (Quickshell.env("MASCOT_CHARACTER") || "clawd").toLowerCase()
+    readonly property string character: (Quickshell.env("MASCOT_CHARACTER") || "claude").toLowerCase()
     readonly property string state: Quickshell.env("MASCOT_STATE") || "idle"
     readonly property string output: Quickshell.env("MASCOT_OUT") || "/tmp/mascot-tui-frame.png"
 
@@ -40,7 +40,7 @@ ShellRoot {
                 y: 20
                 width: 300
                 height: 300
-                sourceComponent: root.character === "empo" ? empoComponent : clawdComponent
+                sourceComponent: root.character === "empo" ? empoComponent : claudeComponent
             }
         }
     }
@@ -55,8 +55,8 @@ ShellRoot {
     }
 
     Component {
-        id: clawdComponent
-        Clawd {
+        id: claudeComponent
+        Claude {
             expression: root.state
             active: true
             reducedMotion: true

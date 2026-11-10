@@ -28,7 +28,7 @@ STANDALONE="${STAGE}/Mascot-Code-${VERSION}-standalone"
 mkdir -p "${STANDALONE}/characters" "${STANDALONE}/mascot"
 cp "${ROOT}/standalone/shell.qml" "${STANDALONE}/shell.qml"
 cp "${ROOT}/inir/modules/mascot/characters/Empo.qml" "${STANDALONE}/characters/Empo.qml"
-cp "${ROOT}/inir/modules/mascot/characters/Clawd.qml" "${STANDALONE}/characters/Clawd.qml"
+cp "${ROOT}/inir/modules/mascot/characters/Claude.qml" "${STANDALONE}/characters/Claude.qml"
 cp "${ROOT}/inir/modules/mascot/characters/qmldir" "${STANDALONE}/characters/qmldir"
 cp -a "${ROOT}/opencode/mascot/." "${STANDALONE}/mascot/"
 cp "${ROOT}/packaging/systemd/mascot-code.service" "${STANDALONE}/"
@@ -48,8 +48,8 @@ Or run it directly:
 
    qs -p ~/.config/quickshell/mascot-code
 
-This build shows Empo or Clawd while an `opencode` TUI is running. Pick one
-with MASCOT_CHARACTER=empo (default) or MASCOT_CHARACTER=clawd. Focus-aware
+This build shows Empo or Claude while an `opencode` TUI is running. Pick one
+with MASCOT_CHARACTER=empo (default) or MASCOT_CHARACTER=claude. Focus-aware
 hiding is only in the iNiR build. See the main README for the state file and
 test commands.
 EOF

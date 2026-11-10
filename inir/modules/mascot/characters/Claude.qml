@@ -3,9 +3,9 @@
 import QtQuick
 
 /**
- * Clawd — the blocky orange Claude Code crab.
+ * Claude — the blocky orange Claude Code crab.
  *
- * Clawd is Anthropic's pixel mascot: a flat terracotta body, two black
+ * Claude is Anthropic's pixel mascot: a flat terracotta body, two black
  * rectangular eyes, two claws and four little legs. This version keeps the
  * silhouette and adds the same nine expressions the companion already uses:
  *   idle | thinking | reading | coding | running | browsing | happy | sad | sleeping
@@ -16,8 +16,8 @@ import QtQuick
  * glow, so the flat pixel look survives every expression.
  *
  * The theme properties from CharacterHost are accepted for the contract but
- * Clawd keeps his own Claude palette on purpose. A wallpaper-tinted crab stops
- * looking like Clawd.
+ * Claude keeps his own Claude palette on purpose. A wallpaper-tinted crab stops
+ * looking like Claude.
  */
 Item {
     id: root
@@ -28,7 +28,7 @@ Item {
     property bool reducedMotion: false
 
     // CharacterHost contract inputs. Kept so the host can pass them without
-    // breaking; Clawd deliberately uses his own fixed palette below.
+    // breaking; Claude deliberately uses his own fixed palette below.
     property color accent: "#d77856"
     property color accentAlt: "#f0eee6"
     property color ink: "#191512"
@@ -38,7 +38,7 @@ Item {
     property color mutedColor: "#9b8b80"
     property string fontFamily: "sans-serif"
 
-    // Claude palette, sampled from the official Clawd art.
+    // Claude palette, sampled from the official Claude art.
     readonly property color shell: "#d77856"
     readonly property color shellLight: "#e99677"
     readonly property color shellDark: "#a94f38"
@@ -340,7 +340,7 @@ Item {
                 }
 
                 // ── Arms ────────────────────────────────────────────────────
-                // The claws sit in front of props so Clawd reads as holding
+                // The claws sit in front of props so Claude reads as holding
                 // the page, keyboard or globe instead of standing behind it.
                 Item {
                     id: leftArm

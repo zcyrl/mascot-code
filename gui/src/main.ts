@@ -5,11 +5,11 @@ import { homedir } from "node:os"
 import { dirname, join } from "node:path"
 import { MascotSelection } from "./contract"
 
-type MascotId = "empo" | "clawd"
+type MascotId = "empo" | "claude"
 
 function normalizeCharacter(value: unknown): MascotId | undefined {
   const text = String(value ?? "").toLowerCase()
-  if (text === "clawd" || text === "claude") return "clawd"
+  if (text === "clawd" || text === "claude") return "claude"
   if (text === "empo") return "empo"
   return undefined
 }

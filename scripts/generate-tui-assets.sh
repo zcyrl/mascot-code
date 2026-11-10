@@ -9,7 +9,7 @@ set -euo pipefail
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 OUT="${ROOT}/opencode/mascot/assets"
 STATES=(idle thinking reading coding running browsing happy sad sleeping)
-CHARACTERS=(empo clawd)
+CHARACTERS=(empo claude)
 
 command -v qs >/dev/null || { echo "qs (Quickshell) is required" >&2; exit 1; }
 command -v magick >/dev/null || { echo "ImageMagick (magick) is required" >&2; exit 1; }

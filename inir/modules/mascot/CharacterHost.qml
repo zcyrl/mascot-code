@@ -11,9 +11,9 @@ import qs.modules.mascot.characters
  *   1. Drop `characters/YourCharacter.qml` in this directory.
  *   2. Add `YourCharacter 1.0 YourCharacter.qml` to characters/qmldir.
  *   3. Add a Component below and a case in _componentFor().
- *   4. Set mascot.codingCompanion.character to its name.
+ *   4. Set `character` in ~/.config/mascot-code/config.json to its name.
  *
- * Built-in characters: "empo" (default) and "clawd" (Claude Code crab).
+ * Built-in characters: "empo" (default) and "claude" (Claude Code crab).
  *
  * A character must expose:
  *   expression: idle | thinking | reading | coding | running | browsing | happy | sad | sleeping
@@ -39,9 +39,9 @@ Item {
 
     function _componentFor(name) {
         switch (String(name ?? "").toLowerCase()) {
-        case "clawd":
+        case "clawd": // spelling from older pickers
         case "claude":
-            return clawdComponent
+            return claudeComponent
         case "empo":
         default:
             return empoComponent
@@ -72,8 +72,8 @@ Item {
     }
 
     Component {
-        id: clawdComponent
-        Clawd {
+        id: claudeComponent
+        Claude {
             expression: root.expression
             detail: root.detail
             active: root.active

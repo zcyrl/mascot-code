@@ -6,12 +6,16 @@
 # assets/. No desktop, wallpaper, bar or grim needed.
 #
 # Usage:
-#   ./scripts/capture-character-screenshots.sh [empo|clawd]
+#   ./scripts/capture-character-screenshots.sh [empo|claude]
 set -euo pipefail
 
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 ASSETS="${ROOT}/assets"
-CHARACTER="$(printf '%s' "${1:-clawd}" | tr '[:upper:]' '[:lower:]')"
+CHARACTER="$(printf '%s' "${1:-claude}" | tr '[:upper:]' '[:lower:]')"
+# "clawd" is the spelling older docs used; keep accepting it.
+case "${CHARACTER}" in
+    clawd) CHARACTER="claude" ;;
+esac
 STATES=(idle thinking reading coding running browsing happy sad sleeping)
 
 command -v qs >/dev/null || { echo "qs (Quickshell) is required" >&2; exit 1; }

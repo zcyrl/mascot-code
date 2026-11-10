@@ -78,7 +78,7 @@ the same selection file:
 
 ```json
 {
-  "character": "clawd",
+  "character": "claude",
   "updated": 1793969137623
 }
 ```
@@ -95,11 +95,17 @@ picker but has no desktop card. OpenCode Desktop 2.2+ loads
 
 The module lives in `~/.config/quickshell/inir/modules/mascot/`.
 
-- `MascotCompanion.qml` already existed in iNiR. Mascot Code adds the coding
-  mode, the session watcher and the focus rules.
+On iNiR 3 it is a **component plugin**: `plugin.json` tells the shell to load
+`MascotCompanion.qml` as a surface of its own, beside iNiR's mascot. The
+installer also lists `mascot` in `~/.config/quickshell/inir/plugins.list`. On
+iNiR 2 the shell loaded the module directly.
+
+- `MascotCompanion.qml` is derived from iNiR's companion. Mascot Code adds the
+  coding mode, the session watcher and the focus rules; iNiR's own chaos romp is
+  not shipped.
 - `CharacterHost.qml` picks the character component.
 - `characters/Empo.qml` draws Empo.
-- `characters/Clawd.qml` draws the Claude Code crab. The component keeps its older `Clawd` name.
+- `characters/Claude.qml` draws the Claude Code crab.
 - `scripts/opencode-mascot-focus.sh` answers `none`, `focused` or `unfocused`
   by walking the process tree from `opencode` up to the focused niri window PID.
 
@@ -109,9 +115,11 @@ A long-lived `inotifywait` process watches `/tmp` for the atomic rename. A short
 Focus changes trigger the probe immediately. A 3-second timer catches OpenCode
 starting or exiting while the focus stays on the same window.
 
-The coding mode is enabled with `mascot.codingCompanion.enable`. The character is
-selected with `mascot.codingCompanion.character` (`empo` or `clawd`), unless the
-shared picker file exists; that file wins.
+The coding mode is enabled with `enable` in
+`~/.config/mascot-code/config.json`. The character is selected with `character`
+there (`empo` or `claude`), unless the shared picker file
+`~/.config/mascot-code/character.json` exists; that file wins. On iNiR 2 the
+same keys live under `mascot.codingCompanion` and are read as a fallback.
 
 ## The standalone build
 

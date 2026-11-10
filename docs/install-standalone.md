@@ -15,7 +15,7 @@ focused. It shows while an `opencode` TUI process is running.
 That copies:
 
 - `standalone/shell.qml` → `~/.config/quickshell/mascot-code/shell.qml`
-- `characters/Empo.qml` and `characters/Clawd.qml` →
+- `characters/Empo.qml` and `characters/Claude.qml` →
   `~/.config/quickshell/mascot-code/characters/`
 - `opencode/mascot/` → `~/.config/opencode/plugins/mascot/`
 - the user service → `~/.config/systemd/user/mascot-code.service`
@@ -36,10 +36,10 @@ qs -p ~/.config/quickshell/mascot-code
 Select Claude with an environment override:
 
 ```bash
-MASCOT_CHARACTER=clawd qs -p ~/.config/quickshell/mascot-code
+MASCOT_CHARACTER=claude qs -p ~/.config/quickshell/mascot-code
 ```
 
-For the systemd service, put `Environment=MASCOT_CHARACTER=clawd` in a drop-in
+For the systemd service, put `Environment=MASCOT_CHARACTER=claude` in a drop-in
 or edit the unit. The default is Empo.
 
 The same choice is available visually: type `/mascot` in OpenCode. The picker
@@ -67,7 +67,7 @@ once a second.
 | hide when OpenCode exits | yes | yes |
 | inotify state updates | yes | 1 Hz `cat` |
 | theme | iNiR wallpaper palette | built-in Empo palette; Claude keeps Claude orange |
-| character selection | `mascot.codingCompanion.character` | `MASCOT_CHARACTER=empo` or `clawd` |
+| character selection | `character` in `~/.config/mascot-code/config.json` (picker file wins) | `MASCOT_CHARACTER=empo` or `claude` |
 | settings UI | iNiR Settings | none; env/file only |
 
 The standalone is intentionally smaller. Focus-aware hiding would require a
