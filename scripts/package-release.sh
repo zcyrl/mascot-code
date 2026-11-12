@@ -4,7 +4,17 @@
 set -euo pipefail
 
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
-VERSION="${1:-1.2.0}"
+VERSION="${1:-}"
+# Default to the version the iNiR component plugin advertises. The old
+# hardcoded default fell behind and would have shipped 1.3.0 as "1.2.0".
+if [ -z "${VERSION}" ]; then
+    VERSION="$(python3 -c 'import json, sys; print(json.load(open(sys.argv[1]))["version"])' \
+        "${ROOT}/inir/modules/mascot/plugin.json")"
+fi
+if [ -z "${VERSION}" ]; then
+    echo "Could not read the version from inir/modules/mascot/plugin.json" >&2
+    exit 1
+fi
 DIST="${ROOT}/dist"
 STAGE="${DIST}/stage"
 

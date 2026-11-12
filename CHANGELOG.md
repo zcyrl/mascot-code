@@ -28,6 +28,9 @@ All notable changes to Mascot Code are documented here.
   server is no longer mistaken for a running TUI.
 - The mascot disappears when the last OpenCode window closes, even if the
   desktop server or a terminal multiplexer pane outlives the window.
+- `scripts/package-release.sh` takes its version from
+  `inir/modules/mascot/plugin.json` instead of a hardcoded default, so a
+  release can no longer be packaged under the previous version's name.
 
 ## v1.2.0 — 2026-11-06
 
